@@ -5,8 +5,8 @@ const app = express();
 const { BridgeSDK, TOKEN, EXCHANGE_MODE, STATUS } = require('bridge-sdk');
 const configs = require('bridge-sdk/lib/configs');
 
-var tools = require('../bridge.js');
-import { exactInputTrade } from './viper'
+var bridge = require('../bridge.js');
+var viper = require('../viper.js');
 
 app.get('/',(req, res) => {
     res.send('Hello World!');
@@ -27,7 +27,7 @@ app.post('/lp/explore',(req, res) => {
     const address = req.body.address;
     const deadLine = req.body.deadLine;
 
-    exactInputTrade(ChainId.MAINNET,tokenA,tokenB,18,18,"A","B","A","B",amountADesired,amountBDesired).then((value) => console.log(value))
+    viper.exactInputTrade(ChainId.MAINNET,tokenA,tokenB,18,18,"A","B","A","B",amountADesired,amountBDesired).then((value) => console.log(value))
 
 
 });
@@ -43,7 +43,7 @@ app.post('/lp/addLiquidity',(req, res) => {
     const address = req.body.address;
     const deadLine = req.body.deadLine;
 
-    tools.operationCall(EXCHANGE_MODE.ETH_TO_ONE,TOKEN.BUSD,NETWORK_TYPE.ETHEREUM,oneAddress,ethAddress,'0x61b125de7560069aef96530ef9430715e3807f41a71056fxxxxxx');
+    bridge.operationCall(EXCHANGE_MODE.ETH_TO_ONE,TOKEN.BUSD,NETWORK_TYPE.ETHEREUM,oneAddress,ethAddress,'0x61b125de7560069aef96530ef9430715e3807f41a71056fxxxxxx');
 });
 
 app.post('/lp/removeLiquidity',(req, res) => {
