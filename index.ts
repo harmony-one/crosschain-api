@@ -5,7 +5,7 @@ const app = express();
 const { BridgeSDK, TOKEN, EXCHANGE_MODE, STATUS } = require('bridge-sdk');
 const configs = require('bridge-sdk/lib/configs');
 
-import { operationCall } from './bridge'
+var tools = require('../bridge.js');
 import { exactInputTrade } from './viper'
 
 app.get('/',(req, res) => {
