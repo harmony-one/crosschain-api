@@ -1,6 +1,10 @@
-import { ChainId, Token, TokenAmount, Pair, Route } from '@uniswap/sdk'
+module.exports.ExactInputTrade = async function() {
+    await exactInputTrade();
+  }
 
-export const exactInputTrade = async (chainId,tokenA,tokenB,decimalsA,decimalsB,symbolA,symbolB,nameA,nameB,tokenAmountA,tokenAmountB,tradeType) => {
+//import { chainId, Token, TokenAmount, Pair, Route } from '@uniswap/sdk'
+
+exactInputTrade = async (chainId,tokenA,tokenB,decimalsA,decimalsB,symbolA,symbolB,nameA,nameB,tokenAmountA,tokenAmountB) => {
     return trade(chainId,tokenA,tokenB,decimalsA,decimalsB,symbolA,symbolB,nameA,nameB,tokenAmountA,tokenAmountB,TradeType.EXACT_INPUT) 
 }
 
