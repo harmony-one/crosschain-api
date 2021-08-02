@@ -1,5 +1,5 @@
-module.exports.OperationCall = async function(oneAddress, ethAddress, hash) {
-  await operationCall(oneAddress, ethAddress, hash);
+module.exports.OperationCall = async function(oneAddress, ethAddress, amount, hash) {
+  await operationCall(oneAddress, ethAddress, amount, hash);
 }
 
 const { BridgeSDK, TOKEN, EXCHANGE_MODE, NETWORK_TYPE, ACTION_TYPE } = require('bridge-sdk');
@@ -16,7 +16,7 @@ const operationCall = async () => {
       type: EXCHANGE_MODE.ETH_TO_ONE,
       token: TOKEN.BUSD,
       network: NETWORK_TYPE.ETHEREUM, // NETWORK_TYPE.BINANCE
-      amount: 0.01,
+      amount: amount,
       oneAddress: oneAddress,
       ethAddress: ethAddress,
     });

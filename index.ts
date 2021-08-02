@@ -18,8 +18,12 @@ app.post('/lp/pair',(req, res) => {
 app.post('/lp/explore',(req, res) => {
   res.send('Hello Explore!');
 });
-app.post('/lp/addLiquidity',(req, res) => {   
-  bridge.OperationCall(req.body.oneAddress,req.body.ethAddress,req.body.hash);
+app.post('/lp/addLiquidity',(req, res) => {
+  const oneAddress = req.body.oneAddress 
+  const ethAddress = req.body.ethAddress
+  const amount = req.body.amount
+  const hash = req.body.hash
+  bridge.OperationCall(oneAddress,ethAddress,amount,hash);
 });
 
 app.post('/lp/removeLiquidity',(req, res) => {
