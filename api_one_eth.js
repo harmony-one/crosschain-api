@@ -96,7 +96,7 @@ async function perform(depositTxnHash, approveTxnHash, burnTxnHash, amt) {
       type: EXCHANGE_MODE.ONE_TO_ETH,
       token: TOKEN.BUSD,
       network: NETWORK_TYPE.ETHEREUM, // NETWORK_TYPE.BINANCE
-      amount: amt,
+      amount: amt/1e18,
       oneAddress: "one1pdv9lrdwl0rg5vglh4xtyrv3wjk3wsqket7zxy",
       ethAddress: "0x0b585f8daefbc68a311fbd4cb20d9174ad174016",
     });
