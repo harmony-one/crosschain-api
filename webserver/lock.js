@@ -3,11 +3,14 @@ require("dotenv").config();
 const { BridgeSDK, TOKEN, EXCHANGE_MODE, NETWORK_TYPE, ACTION_TYPE } = require('bridge-sdk');
 const BN = require('bn.js');
 const Web3 = require('web3');
-const web3 = new Web3(new Web3.providers.HttpProvider(process.env.HARMONY_NODE_URL));
 const configs = require('bridge-sdk/lib/configs');
 
-module.exports.Lock = async function(oneAddress, ethAddress, node, gasLimit, contractManagerAbiJson, contractManagerAddress, wallet, amount) {
-  return await lock(oneAddress, ethAddress, node, gasLimit, contractManagerAbiJson, contractManagerAddress, wallet, amount);
+module.exports.Lock = async function(approveTxnHash, lockTxnHash, oneAddress, ethAddress, amount) {
+  return await lock(approveTxnHash, lockTxnHash, oneAddress, ethAddress, amount);
+}
+
+module.exports.LockTxn = async function(node, gasLimit, abiJson, contractManagerAddress, wallet, amountInWei) {
+  return await lockTxn(node, gasLimit, abiJson, contractManagerAddress, wallet, amountInWei);
 }
 
 async function lockTxn(node, gasLimit, abiJson, contractManagerAddress, wallet, amountInWei) {
@@ -58,19 +61,6 @@ const lock = async (approveTxnHash, lockTxnHash, oneAddress, ethAddress, amount)
   
   } catch (e) {
     return { trx: "swap", success: true, error_message: e.message, error_body: e.response?.body}
-  }
-}
-
-async function lock(oneAddress, ethAddress, node, gasLimit, contractManagerAbiJson, contractManagerAddress, wallet, amount) {
-  try {
-    let fomattedAmount = web3.utils.toWei(amount, "ether");
-    console.log("Trx:", "Lock it!")
-    const lockTxnHash = await lockTxn(node, gasLimit, contractManagerAbiJson, contractManagerAddress, wallet, fomattedAmount);
-    console.log("lockTxnHash", lockTxnHash);
-    await lock(approveTxnHash, lockTxnHash, oneAddress, ethAddress, fomattedAmount);
-    return { trx: "lock", success: true, error_message: null, error_body: null}
-  } catch (e) {
-    return { trx: "lock", success: false, error_message: e.message, error_body: e.response?.body}
   }
 }
 

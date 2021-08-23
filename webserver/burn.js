@@ -3,11 +3,18 @@ require("dotenv").config();
 const { BridgeSDK, TOKEN, EXCHANGE_MODE, NETWORK_TYPE, ACTION_TYPE } = require('bridge-sdk');
 const BN = require('bn.js');
 const Web3 = require('web3');
-const web3 = new Web3(new Web3.providers.HttpProvider(process.env.HARMONY_NODE_URL));
 const configs = require('bridge-sdk/lib/configs');
 
-module.exports.Burn = async function(oneAddress, ethAddress, node, gasLimit, contractManagerAbiJson, contractManagerAddress, wallet, amount) {
-  return await burn(oneAddress, ethAddress, node, gasLimit, contractManagerAbiJson, contractManagerAddress, wallet, amount);
+module.exports.Burn = async function(depositTxnHash, approveTxnHash, burnTxnHash, oneAddress, ethAddress, amount) {
+  return await burn(depositTxnHash, approveTxnHash, burnTxnHash, oneAddress, ethAddress, amount);
+}
+
+module.exports.Deposit = async function(node, gasLimit, abiJson,  wallet) {
+  return await deposit(node, gasLimit, abiJson,  wallet);
+}
+
+module.exports.BurnTxn = async function(node, gasLimit, abiJson, contractManagerAddress, wallet, amountInWei) {
+  return await burnTxn(node, gasLimit, abiJson, contractManagerAddress, wallet, amountInWei);
 }
 
 async function deposit(node, gasLimit, abiJson,  wallet) {
@@ -92,17 +99,5 @@ const burn = async (depositTxnHash, approveTxnHash, burnTxnHash, oneAddress, eth
   }
 }
 
-async function burn(oneAddress, ethAddress, node, gasLimit, contractManagerAbiJson, contractManagerAddress, wallet, amount) {
-  try {
-    let fomattedAmount = web3.utils.toWei(amount, "ether");
-    const depositTxnHash = await deposit(node, gasLimit, './abi/Deposit.json', wallet, fomattedAmount);
-    console.log("depositTxnHash", depositTxnHash);
-    const burnTxnHash = await burnTxn(node, gasLimit, contractManagerAbiJson, contractManagerAddress, wallet, fomattedAmount);
-    console.log("burnTxnHash", burnTxnHash);
-    await burn(depositTxnHash, approveTxnHash, burnTxnHash, oneAddress, ethAddress, fomattedAmount);
-    return { trx: "burn", success: true, error_message: null, error_body: null}
-  } catch (e) {
-    return { trx: "burn", success: false, error_message: e.message, error_body: e.response?.body}
-  }
-}
+
 

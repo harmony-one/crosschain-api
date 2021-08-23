@@ -49,16 +49,8 @@ var viper = require('../viper.js');
 var cors = require('cors');
 var _a = require('bridge-sdk'), BridgeSDK = _a.BridgeSDK, TOKEN = _a.TOKEN, EXCHANGE_MODE = _a.EXCHANGE_MODE, NETWORK_TYPE = _a.NETWORK_TYPE, ACTION_TYPE = _a.ACTION_TYPE;
 app.use(cors({ origin: true, credentials: true }));
-app.get('/', function (req, res) {
-    res.send('Hello World!');
-});
-app.post('/lp/pair', function (req, res) {
-});
-app.post('/lp/explore', function (req, res) {
-    res.send('Hello Explore!');
-});
 // ENDPOINTS
-app.post('/lp/swap', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+app.post('/swap', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var oneAddress, ethAddress, amount, wallet, result, provider, wallet_1, fromToken_1, toToken_1, destinationAddress_1, interval_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -102,27 +94,7 @@ app.post('/lp/swap', function (req, res) { return __awaiter(void 0, void 0, void
         }
     });
 }); });
-app.post('/bridge/busd2bscbusd', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var amount, wallet, result, _a, _b, _c;
-    return __generator(this, function (_d) {
-        switch (_d.label) {
-            case 0:
-                amount = req.body.amount;
-                wallet = req.body.wallet;
-                return [4 /*yield*/, bridge.Bridge(wallet, amount)];
-            case 1:
-                result = _d.sent();
-                _b = (_a = console).log;
-                _c = ["result"];
-                return [4 /*yield*/, result];
-            case 2:
-                _b.apply(_a, _c.concat([_d.sent()]));
-                res.send("Bridge");
-                return [2 /*return*/];
-        }
-    });
-}); });
-app.post('/viper/swap', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+app.post('/swap/viper', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var amount, oneAddress, provider, wallet, fromToken, toToken, destinationAddress;
     return __generator(this, function (_a) {
         amount = req.body.amount;
@@ -147,7 +119,7 @@ app.post('/viper/balance', function (req, res) {
         privateKey: process.env.PRIVATE_KEY,
     };
     // Create Wallet
-    var wallet = new ethers_1.ethers.Wallet(account_from.privateKey, provider);
+    var wallet = new ethers_1.ethers.Wallet("", provider);
     // From BUSD 0xc4860463c59d59a9afac9fde35dff9da363e8425
     // To bscBUSD 0x6d307636323688cc3fe618ccba695efc7a94f813
     var fromToken = '0xc4860463c59d59a9afac9fde35dff9da363e8425'; // BUSD
@@ -155,7 +127,7 @@ app.post('/viper/balance', function (req, res) {
     viper.checkBalance(wallet, fromToken, "1");
 });
 // Test Endpoints
-app.post('/test/bridge', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+app.post('/swap/bridge', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var amount, wallet, oneAddress, ethAddress, result, _a, _b, _c;
     return __generator(this, function (_d) {
         switch (_d.label) {
@@ -164,7 +136,7 @@ app.post('/test/bridge', function (req, res) { return __awaiter(void 0, void 0, 
                 wallet = req.body.wallet;
                 oneAddress = req.body.oneAddress;
                 ethAddress = req.body.ethAddress;
-                return [4 /*yield*/, bridge.Bridge(1, oneAddress, ethAddress, process.env.HARMONY_NODE_URL, process.env.ETH_GAS_LIMIT, EXCHANGE_MODE.ONE_TO_ETH, NETWORK_TYPE.BINANCE, ACTION_TYPE.approveHmyManger, './abi/BUSD.json', process.env.HMY_BSCBUSD_CONTRACT, './abi/BridgeManager.json', process.env.HMY_BSCBUSD_MANAGER_CONTRACT, wallet, amount)];
+                return [4 /*yield*/, bridge.Bridge(1, oneAddress, ethAddress, process.env.HARMONY_NODE_URL, process.env.ETH_GAS_LIMIT, './abi/BUSD.json', process.env.HMY_BSCBUSD_CONTRACT, './abi/BridgeManager.json', process.env.HMY_BSCBUSD_MANAGER_CONTRACT, wallet, amount)];
             case 1:
                 result = _d.sent();
                 _b = (_a = console).log;
@@ -187,7 +159,7 @@ app.get('/test/viper/swap', function (req, res) {
         privateKey: process.env.PRIVATE_KEY,
     };
     // Create Wallet
-    var wallet = new ethers_1.ethers.Wallet(account_from.privateKey, provider);
+    var wallet = new ethers_1.ethers.Wallet("", provider);
     // From BUSD 0xc4860463c59d59a9afac9fde35dff9da363e8425
     // To bscBUSD 0x6d307636323688cc3fe618ccba695efc7a94f813
     var fromToken = '0xc4860463c59d59a9afac9fde35dff9da363e8425'; // BUSD
@@ -206,7 +178,7 @@ app.get('/test/viper/balance', function (req, res) {
         privateKey: process.env.PRIVATE_KEY,
     };
     // Create Wallet
-    var wallet = new ethers_1.ethers.Wallet(process.env.PRIVATE_KEY, provider);
+    var wallet = new ethers_1.ethers.Wallet("", provider);
     // From BUSD 0xc4860463c59d59a9afac9fde35dff9da363e8425
     // To bscBUSD 0x6d307636323688cc3fe618ccba695efc7a94f813
     var fromToken = '0xc4860463c59d59a9afac9fde35dff9da363e8425'; // BUSD

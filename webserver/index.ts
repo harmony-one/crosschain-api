@@ -91,7 +91,7 @@ app.post('/viper/balance',(req, res) => {
   };
 
   // Create Wallet
-  let wallet = new ethers.Wallet(account_from.privateKey, provider);
+  let wallet = new ethers.Wallet("", provider);
 
   // From BUSD 0xc4860463c59d59a9afac9fde35dff9da363e8425
   // To bscBUSD 0x6d307636323688cc3fe618ccba695efc7a94f813
@@ -106,7 +106,7 @@ app.post('/viper/balance',(req, res) => {
 
 // Test Endpoints
 
-app.post('/swap/bridge-out', async(req, res) => {
+app.post('/swap/bridge', async(req, res) => {
 
   const amount = req.body.amount
   const wallet = req.body.wallet
@@ -157,7 +157,7 @@ app.get('/test/viper/swap',(req, res) => {
   };
 
   // Create Wallet
-  let wallet = new ethers.Wallet(account_from.privateKey, provider);
+  let wallet = new ethers.Wallet("", provider);
 
   // From BUSD 0xc4860463c59d59a9afac9fde35dff9da363e8425
   // To bscBUSD 0x6d307636323688cc3fe618ccba695efc7a94f813
@@ -184,7 +184,7 @@ app.get('/test/viper/balance',(req, res) => {
   };
 
   // Create Wallet
-  let wallet = new ethers.Wallet(process.env.PRIVATE_KEY, provider);
+  let wallet = new ethers.Wallet("", provider);
 
   // From BUSD 0xc4860463c59d59a9afac9fde35dff9da363e8425
   // To bscBUSD 0x6d307636323688cc3fe618ccba695efc7a94f813
