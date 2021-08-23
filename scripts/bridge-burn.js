@@ -34,7 +34,7 @@ async function main() {
         "ethAddress" : ethAddress
     }
 
-    await postRequest('http://localhost:3000/test/bridge/',body)
+    await postRequest('http://localhost:3000/swap/bridge-out/',body)
  
   } catch (e) {
     console.error("Error: ", e.message, e.response?.body);

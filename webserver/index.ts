@@ -1,7 +1,6 @@
 import express from "express";
 import { ethers } from "ethers";
 
-
 require('dotenv').config()
 
 const app = express();
@@ -107,7 +106,7 @@ app.post('/viper/balance',(req, res) => {
 
 // Test Endpoints
 
-app.post('/test/bridge', async(req, res) => {
+app.post('/swap/bridge-out', async(req, res) => {
 
   const amount = req.body.amount
   const wallet = req.body.wallet

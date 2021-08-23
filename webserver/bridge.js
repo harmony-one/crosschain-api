@@ -6,6 +6,9 @@ const Web3 = require('web3');
 const web3 = new Web3(new Web3.providers.HttpProvider(process.env.HARMONY_NODE_URL));
 const configs = require('bridge-sdk/lib/configs');
 
+var lock = require('../lock.js');
+var burn = require('../burn.js');
+
 module.exports.Bridge = async function(trx, oneAddress, ethAddress, node, gasLimit, contractAbiJson, contractAddress, contractManagerAbiJson, contractManagerAddress, wallet, amount) {
   return await bridge(trx, oneAddress, ethAddress, node, gasLimit, contractAbiJson, contractAddress, contractManagerAbiJson, contractManagerAddress, wallet, amount);
 }
@@ -194,18 +197,20 @@ async function bridge(trx, oneAddress, ethAddress, node, gasLimit, contractAbiJs
 
     switch (trx) {
       case 0: //Lock
-        console.log("Trx:", "Lock it!")
-        const lockTxnHash = await lockTxn(node, gasLimit, contractManagerAbiJson, contractManagerAddress, wallet, fomattedAmount);
-        console.log("lockTxnHash", lockTxnHash);
-        await lock(approveTxnHash, lockTxnHash, oneAddress, ethAddress, fomattedAmount);
+        lock.lock(oneAddress, ethAddress, node, gasLimit, contractManagerAbiJson, contractManagerAddress, wallet, amount)
+        // console.log("Trx:", "Lock it!")
+        // const lockTxnHash = await lockTxn(node, gasLimit, contractManagerAbiJson, contractManagerAddress, wallet, fomattedAmount);
+        // console.log("lockTxnHash", lockTxnHash);
+        // await lock(approveTxnHash, lockTxnHash, oneAddress, ethAddress, fomattedAmount);
         break;
       case 1: // Burn
       console.log("Trx:", "Burn it!") 
-        const depositTxnHash = await deposit(node, gasLimit, './abi/Deposit.json', wallet, fomattedAmount);
-        console.log("depositTxnHash", depositTxnHash);
-        const burnTxnHash = await burnTxn(node, gasLimit, contractManagerAbiJson, contractManagerAddress, wallet, fomattedAmount);
-        console.log("burnTxnHash", burnTxnHash);
-        await burn(depositTxnHash, approveTxnHash, burnTxnHash, oneAddress, ethAddress, fomattedAmount);
+        burn.Burn(oneAddress, ethAddress, node, gasLimit, contractManagerAbiJson, contractManagerAddress, wallet, amount)
+        // const depositTxnHash = await deposit(node, gasLimit, './abi/Deposit.json', wallet, fomattedAmount);
+        // console.log("depositTxnHash", depositTxnHash);
+        // const burnTxnHash = await burnTxn(node, gasLimit, contractManagerAbiJson, contractManagerAddress, wallet, fomattedAmount);
+        // console.log("burnTxnHash", burnTxnHash);
+        // await burn(depositTxnHash, approveTxnHash, burnTxnHash, oneAddress, ethAddress, fomattedAmount);
         break;
       default:
         return { trx: "bridge", success: false, error_message: "Wrong transaction value", error_body: "Only possible values are 0 or 1"}
