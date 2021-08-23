@@ -98,8 +98,8 @@ async function perform(depositTxnHash, approveTxnHash, burnTxnHash, amt) {
       erc20Address: process.env.BSC_BUSD_CONTRACT,
       network: NETWORK_TYPE.BINANCE, // NETWORK_TYPE.BINANCE
       amount: amt/1e18,
-      oneAddress: "one1pdv9lrdwl0rg5vglh4xtyrv3wjk3wsqket7zxy",
-      ethAddress: "0x0b585f8daefbc68a311fbd4cb20d9174ad174016",
+      oneAddress: 'one1ncdd0ppzl4t3kfke8m4cjhmrrfnu64rz5nwaux',
+      ethAddress: '0x9E1AD78422Fd571B26D93EeB895f631A67Cd5462',
     });
 
     await operation.confirmAction({
@@ -127,7 +127,7 @@ async function main() {
     const depositTxnHash = await deposit();
     console.log("depositTxnHash", depositTxnHash);
 
-    let amount = web3.utils.toWei("2", "ether");
+    let amount = web3.utils.toWei("0.02", "ether");
     const approveTxnHash = await approveBUSDEthManager(amount);
     console.log("approveTxnHash", approveTxnHash);
 

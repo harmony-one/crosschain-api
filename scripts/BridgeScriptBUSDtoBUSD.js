@@ -1,3 +1,6 @@
+
+var request = require('request');
+const ethers = require('ethers')
 require("dotenv").config();
 const {
   BridgeSDK,
@@ -64,50 +67,48 @@ async function lockTxn(amountInWei) {
   return transaction.transactionHash;
 }
 
-async function perform(approveTxnHash, lockTxnHash) {
-  try {
-    const bridgeSDK = new BridgeSDK({ logLevel: 2 });
-    await bridgeSDK.init(configs.testnet);
-    const operation = await bridgeSDK.createOperation({
-      type: EXCHANGE_MODE.ETH_TO_ONE,
-      token: TOKEN.BUSD,
-      network: NETWORK_TYPE.ETHEREUM, // NETWORK_TYPE.BINANCE
-      amount: 1,
-      oneAddress: "one1pdv9lrdwl0rg5vglh4xtyrv3wjk3wsqket7zxy",
-      ethAddress: "0x0b585f8daefbc68a311fbd4cb20d9174ad174016",
-    });
-
-    await operation.confirmAction({
-      actionType: ACTION_TYPE.approveEthManger,
-      transactionHash: approveTxnHash,
-    });
-
-    await operation.confirmAction({
-      actionType: ACTION_TYPE.lockToken,
-      transactionHash: lockTxnHash,
-    });
-  } catch (e) {
-    console.error("Error: ", e.message, e.response?.body);
+async function postRequest(url,body) {
+  
+  var clientServerOptions = {
+    uri: url,
+    body: JSON.stringify(body),
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    }
   }
+  request(clientServerOptions, function (error, response) {
+    console.log(error,response.body);
+    return;
+  });
 }
 
 async function main() {
   try {
-    let amount = web3.utils.toWei("1", "ether");
+    
+    // const provider = new ethers.providers.JsonRpcProvider(process.env.HARMONY_NODE_URL);
+
+    // let wallet = new ethers.Wallet(process.env.PRIVATE_KEY, provider);
+    
+    let amount = web3.utils.toWei("0.15", "ether");
     const approveTxnHash = await approveBUSDEthManager(amount);
     console.log("approveTxnHash", approveTxnHash);
-
-    // setTimeout(() => {  web3.eth.getTransactionReceipt(approveTxnHash).then((receipt)=>{console.log(receipt);}); }, 10000);
 
     const lockTxnHash = await lockTxn(amount);
     console.log("lockTxnHash", lockTxnHash);
 
-    // setTimeout(() => {  web3.eth.getTransactionReceipt(lockTxnHash).then((receipt)=>{console.log(receipt);}); }, 10000);
-    setTimeout(() => {
-      perform(approveTxnHash, lockTxnHash).then(() => {
-        console.log("done");
-      });
-    }, 10000);
+    const body = {
+        "approveTxnHash" : approveTxnHash, 
+        "lockTxnHash" : lockTxnHash, 
+        "oneAddress" : "0x9E1AD78422Fd571B26D93EeB895f631A67Cd5462",
+        "ethAddress" : "0x9E1AD78422Fd571B26D93EeB895f631A67Cd5462",
+        "amount" : amount
+        // "wallet" : wallet
+      }
+
+    await postRequest('http://localhost:3000/lp/addLiquidity',body)
+    // await postRequest('http://localhost:3000/lp/swap',body) 
+ 
   } catch (e) {
     console.error("Error: ", e.message, e.response?.body);
   }
