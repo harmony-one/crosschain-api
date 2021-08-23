@@ -3,7 +3,7 @@ Welcome to Harmony's Crosschain API!
 
 This API will let you swap assets between different chains, this is the current status:
 
-Version: B0.1
+**Version: B0.1**
 
 * This version allow you to swap BUSD in Ethereum into BUSD in Binance, we thought this is a good first step because it will serve as a vehicle between any assets between the two networks.
 
