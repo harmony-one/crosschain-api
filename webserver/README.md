@@ -1,18 +1,22 @@
 # crosschain-api
-Harmony's CrossChain API
+Welcome to Harmony's Crosschain API!
 
-### Liquidity Providers Endpoints
+This API will let you swap assets between different chains, this is the current status:
 
-#### Implemenation of Bridge SDK
+Version: B0.1
 
-* Definition of endpoints for Liquidity Providers
+* This version allow you to swap BUSD in Ethereum into BUSD in Binance, we thought this is a good first step because it will serve as a vehicle between any assets between the two networks.
 
-* Calling basic bridge functionality from the endpoints
+* Testnets required for running this versions are:
 
-#### Integration with Viper SDK
+    * Harmony Testnet (https://api.s0.b.hmny.io)
+    * Ethereum Kovan (https://kovan.infura.io/v3/acb534b53d3a47b09d7886064f8e51b6)
+    * BSC Testnet (https://data-seed-prebsc-2-s1.binance.org:8545/)
 
-* Calling Viper's Uniswap SDK to process a trade a return the information in JSON format
+### Some Basic Instructions
 
-#### General Integration
+* Right now you see two folders, `webserver` and `scripts`. The former contains the webserver that must be started to call the API endpoints locally in you machine (there is `.REDME` file there with more detailed instructions), he latter contains scripts in `javascript` and `postman` that can be used to test the endpoints once you have the webserber running and also as examples of how to make `GET` and `POST` calls.
 
-* Bridge and Viper Basic Multi-step integration
+* You will need to set `.env` files in both folders, we are adding samples for those files, you can just go ahead and rename them from `env_file` to `.env`, you will need to add your private key to the file in the scripts folder if you plan to use the `.js` file. If you plan to use postman, you will need to paste it into the workspace, so make sure that you create it outside the repo. In any case we encourage you to add `.env` files to the `.gitignore` and never paste you private keys in the code. 
+
+Enjoy!
