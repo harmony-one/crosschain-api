@@ -6,12 +6,8 @@ const Web3 = require('web3');
 const web3 = new Web3(new Web3.providers.HttpProvider(process.env.HARMONY_NODE_URL));
 const configs = require('bridge-sdk/lib/configs');
 
-module.exports.Bridge = async function(trx, oneAddress, ethAddress, node, gasLimit, exchangeMode, networkType, ActionType, contractAbiJson, contractAddress, contractManagerAbiJson, contractManagerAddress, wallet, amount) {
-  return await bridge(trx, oneAddress, ethAddress, node, gasLimit, exchangeMode, networkType, ActionType, contractAbiJson, contractAddress, contractManagerAbiJson, contractManagerAddress, wallet, amount);
-}
-
-module.exports.OperationCall = async function(exchangeMode, networkType, ActionType, approveTxnHash, lockTxnHash, oneAddress, ethAddress, amount) {
-  await burn(exchangeMode, networkType, ActionType, approveTxnHash, lockTxnHash, oneAddress, ethAddress, amount);
+module.exports.Bridge = async function(trx, oneAddress, ethAddress, node, gasLimit, contractAbiJson, contractAddress, contractManagerAbiJson, contractManagerAddress, wallet, amount) {
+  return await bridge(trx, oneAddress, ethAddress, node, gasLimit, contractAbiJson, contractAddress, contractManagerAbiJson, contractManagerAddress, wallet, amount);
 }
 
 // create and sign approve BUSD txn
@@ -62,20 +58,20 @@ async function lockTxn(node, gasLimit, abiJson, contractManagerAddress, wallet, 
   return transaction.transactionHash;
 }
 
-const lock = async (exchangeMode, networkType, ActionType, approveTxnHash, lockTxnHash, oneAddress, ethAddress, amount) => {
+const lock = async (approveTxnHash, lockTxnHash, oneAddress, ethAddress, amount) => {
   try {
     const bridgeSDK = new BridgeSDK({ logLevel: 2 });
     await bridgeSDK.init(configs.testnet);
     const operation = await bridgeSDK.createOperation({
-      type: exchangeMode, 
+      type: EXCHANGE_MODE.ETH_TO_ONE, 
       token: TOKEN.BUSD,
-      network: networkType,
+      network: NETWORK_TYPE.ETHEREUM,
       amount: amount,
       oneAddress: oneAddress,
       ethAddress: ethAddress,
     });
     await operation.confirmAction({
-      actionType: ActionType,
+      actionType: ACTION_TYPE.approveEthManger,
       transactionHash: approveTxnHash,
     });
     console.log("Eth Manager Approved")
@@ -139,17 +135,17 @@ async function burnTxn(node, gasLimit, abiJson, contractManagerAddress, wallet, 
   return transaction.transactionHash;
 }
 
-const burn = async (exchangeMode, networkType, ActionType, depositTxnHash, approveTxnHash, burnTxnHash, oneAddress, ethAddress, amount) => {
+const burn = async (depositTxnHash, approveTxnHash, burnTxnHash, oneAddress, ethAddress, amount) => {
   try {
     
     const bridgeSDK = new BridgeSDK({ logLevel: 2 });
     await bridgeSDK.init(configs.testnet);
 
     const operation = await bridgeSDK.createOperation({
-      type: exchangeMode,
+      type: EXCHANGE_MODE.ONE_TO_ETH,
       token: TOKEN.ERC20,
       erc20Address: process.env.BSC_BUSD_CONTRACT,
-      network: networkType,
+      network: NETWORK_TYPE.BINANCE,
       amount: amount/1e18,
       oneAddress: oneAddress,
       ethAddress: ethAddress,
@@ -159,7 +155,7 @@ const burn = async (exchangeMode, networkType, ActionType, depositTxnHash, appro
       transactionHash: depositTxnHash,
     });
     await operation.confirmAction({
-      actionType: ActionType,
+      actionType: ACTION_TYPE.approveHmyManger,
       transactionHash: approveTxnHash,
     });
     console.log("Hmy Manager Approved")
@@ -175,7 +171,7 @@ const burn = async (exchangeMode, networkType, ActionType, depositTxnHash, appro
   }
 }
 
-async function bridge(trx, oneAddress, ethAddress, node, gasLimit, exchangeMode, networkType, ActionType, contractAbiJson, contractAddress, contractManagerAbiJson, contractManagerAddress, wallet, amount) {
+async function bridge(trx, oneAddress, ethAddress, node, gasLimit, contractAbiJson, contractAddress, contractManagerAbiJson, contractManagerAddress, wallet, amount) {
   try {
 
     let fomattedAmount = web3.utils.toWei(amount, "ether");
@@ -201,7 +197,7 @@ async function bridge(trx, oneAddress, ethAddress, node, gasLimit, exchangeMode,
         console.log("Trx:", "Lock it!")
         const lockTxnHash = await lockTxn(node, gasLimit, contractManagerAbiJson, contractManagerAddress, wallet, fomattedAmount);
         console.log("lockTxnHash", lockTxnHash);
-        await lock(exchangeMode, networkType, ActionType, approveTxnHash, lockTxnHash, oneAddress, ethAddress, fomattedAmount);
+        await lock(approveTxnHash, lockTxnHash, oneAddress, ethAddress, fomattedAmount);
         break;
       case 1: // Burn
       console.log("Trx:", "Burn it!") 
@@ -209,7 +205,7 @@ async function bridge(trx, oneAddress, ethAddress, node, gasLimit, exchangeMode,
         console.log("depositTxnHash", depositTxnHash);
         const burnTxnHash = await burnTxn(node, gasLimit, contractManagerAbiJson, contractManagerAddress, wallet, fomattedAmount);
         console.log("burnTxnHash", burnTxnHash);
-        await burn(exchangeMode, networkType, ActionType, depositTxnHash, approveTxnHash, burnTxnHash, oneAddress, ethAddress, fomattedAmount);
+        await burn(depositTxnHash, approveTxnHash, burnTxnHash, oneAddress, ethAddress, fomattedAmount);
         break;
       default:
         return { trx: "bridge", success: false, error_message: "Wrong transaction value", error_body: "Only possible values are 0 or 1"}
