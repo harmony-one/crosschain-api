@@ -37,7 +37,7 @@ This enpoint will swap balances between Ethereum BUSD and Binance BUSD, the body
 
 You can see an example of this call in the `swap.js` file in the scripts folder of this repo
 
-* `POST /swap/bridge-in` 
+* _`POST /swap/bridge-in`_ 
 
 This enpoint will bridges `BUSD` in ethereum to Harmony's `BUSD`, it is the first step of the step-by-step swap, the body for this request should look like this:
 
