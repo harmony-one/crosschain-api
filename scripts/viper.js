@@ -5,9 +5,6 @@ require("dotenv").config();
 
 const BN = require("bn.js");
 const Web3 = require("web3");
-const web3 = new Web3(
-  new Web3.providers.HttpProvider(process.env.HARMONY_NODE_URL)
-);
 
 async function postRequest(url,body) {
   

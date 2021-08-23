@@ -47,7 +47,6 @@ app.use(express_1.default.json());
 var bridge = require('../bridge.js');
 var viper = require('../viper.js');
 var cors = require('cors');
-var _a = require('bridge-sdk'), BridgeSDK = _a.BridgeSDK, TOKEN = _a.TOKEN, EXCHANGE_MODE = _a.EXCHANGE_MODE, NETWORK_TYPE = _a.NETWORK_TYPE, ACTION_TYPE = _a.ACTION_TYPE;
 app.use(cors({ origin: true, credentials: true }));
 // ENDPOINTS
 app.post('/swap', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
@@ -59,7 +58,7 @@ app.post('/swap', function (req, res) { return __awaiter(void 0, void 0, void 0,
                 ethAddress = req.body.ethAddress;
                 amount = req.body.amount;
                 wallet = req.body.wallet;
-                return [4 /*yield*/, bridge.Bridge(0, oneAddress, ethAddress, process.env.ETH_NODE_URL, process.env.ETH_GAS_LIMIT, EXCHANGE_MODE.ETH_TO_ONE, NETWORK_TYPE.ETHEREUM, ACTION_TYPE.approveEthManger, './abi/BUSD.json', process.env.ETH_BUSD_CONTRACT, './abi/BUSDEthManager.json', process.env.ETH_BUSD_MANAGER_CONTRACT, wallet, amount)];
+                return [4 /*yield*/, bridge.Bridge(0, oneAddress, ethAddress, process.env.ETH_NODE_URL, process.env.ETH_GAS_LIMIT, './abi/BUSD.json', process.env.ETH_BUSD_CONTRACT, './abi/BUSDEthManager.json', process.env.ETH_BUSD_MANAGER_CONTRACT, wallet, amount)];
             case 1:
                 result = _a.sent();
                 if (result.success == true) {
@@ -90,6 +89,50 @@ app.post('/swap', function (req, res) { return __awaiter(void 0, void 0, void 0,
                     console.log("Assets Bridging Failed");
                     res.send("Assets Bridging Failed");
                 }
+                return [2 /*return*/];
+        }
+    });
+}); });
+app.post('/swap/bridge-in', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var amount, wallet, oneAddress, ethAddress, result, _a, _b, _c;
+    return __generator(this, function (_d) {
+        switch (_d.label) {
+            case 0:
+                amount = req.body.amount;
+                wallet = req.body.wallet;
+                oneAddress = req.body.oneAddress;
+                ethAddress = req.body.ethAddress;
+                return [4 /*yield*/, bridge.Bridge(0, oneAddress, ethAddress, process.env.ETH_NODE_URL, process.env.ETH_GAS_LIMIT, './abi/BUSD.json', process.env.ETH_BUSD_CONTRACT, './abi/BUSDEthManager.json', process.env.ETH_BUSD_MANAGER_CONTRACT, wallet, amount)];
+            case 1:
+                result = _d.sent();
+                _b = (_a = console).log;
+                _c = ["result"];
+                return [4 /*yield*/, result];
+            case 2:
+                _b.apply(_a, _c.concat([_d.sent()]));
+                res.send(result);
+                return [2 /*return*/];
+        }
+    });
+}); });
+app.post('/swap/bridge-out', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var amount, wallet, oneAddress, ethAddress, result, _a, _b, _c;
+    return __generator(this, function (_d) {
+        switch (_d.label) {
+            case 0:
+                amount = req.body.amount;
+                wallet = req.body.wallet;
+                oneAddress = req.body.oneAddress;
+                ethAddress = req.body.ethAddress;
+                return [4 /*yield*/, bridge.Bridge(1, oneAddress, ethAddress, process.env.HARMONY_NODE_URL, process.env.ETH_GAS_LIMIT, './abi/BUSD.json', process.env.HMY_BSCBUSD_CONTRACT, './abi/BridgeManager.json', process.env.HMY_BSCBUSD_MANAGER_CONTRACT, wallet, amount)];
+            case 1:
+                result = _d.sent();
+                _b = (_a = console).log;
+                _c = ["result"];
+                return [4 /*yield*/, result];
+            case 2:
+                _b.apply(_a, _c.concat([_d.sent()]));
+                res.send(result);
                 return [2 /*return*/];
         }
     });
@@ -125,65 +168,6 @@ app.post('/viper/balance', function (req, res) {
     var fromToken = '0xc4860463c59d59a9afac9fde35dff9da363e8425'; // BUSD
     res.send('Balance');
     viper.checkBalance(wallet, fromToken, "1");
-});
-// Test Endpoints
-app.post('/swap/bridge', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var amount, wallet, oneAddress, ethAddress, result, _a, _b, _c;
-    return __generator(this, function (_d) {
-        switch (_d.label) {
-            case 0:
-                amount = req.body.amount;
-                wallet = req.body.wallet;
-                oneAddress = req.body.oneAddress;
-                ethAddress = req.body.ethAddress;
-                return [4 /*yield*/, bridge.Bridge(1, oneAddress, ethAddress, process.env.HARMONY_NODE_URL, process.env.ETH_GAS_LIMIT, './abi/BUSD.json', process.env.HMY_BSCBUSD_CONTRACT, './abi/BridgeManager.json', process.env.HMY_BSCBUSD_MANAGER_CONTRACT, wallet, amount)];
-            case 1:
-                result = _d.sent();
-                _b = (_a = console).log;
-                _c = ["result"];
-                return [4 /*yield*/, result];
-            case 2:
-                _b.apply(_a, _c.concat([_d.sent()]));
-                res.send(result);
-                return [2 /*return*/];
-        }
-    });
-}); });
-app.get('/test/viper/swap', function (req, res) {
-    //viper.ExactInputTrade();
-    // A Web3Provider wraps a standard Web3 provider, which is
-    // what Metamask injects as window.ethereum into each page
-    var provider = new ethers_1.ethers.providers.JsonRpcProvider(process.env.HARMONY_NODE_URL);
-    // Variables
-    var account_from = {
-        privateKey: process.env.PRIVATE_KEY,
-    };
-    // Create Wallet
-    var wallet = new ethers_1.ethers.Wallet("", provider);
-    // From BUSD 0xc4860463c59d59a9afac9fde35dff9da363e8425
-    // To bscBUSD 0x6d307636323688cc3fe618ccba695efc7a94f813
-    var fromToken = '0xc4860463c59d59a9afac9fde35dff9da363e8425'; // BUSD
-    var toToken = '0x6d307636323688cc3fe618ccba695efc7a94f813'; // bscBUSD
-    var destinationAddress = '0x9E1AD78422Fd571B26D93EeB895f631A67Cd5462';
-    viper.swapForToken("1", wallet, fromToken, toToken, destinationAddress);
-    res.send('Test Viper Swap');
-});
-app.get('/test/viper/balance', function (req, res) {
-    //viper.ExactInputTrade();
-    // A Web3Provider wraps a standard Web3 provider, which is
-    // what Metamask injects as window.ethereum into each page
-    var provider = new ethers_1.ethers.providers.JsonRpcProvider(process.env.HARMONY_NODE_URL);
-    // Variables
-    var account_from = {
-        privateKey: process.env.PRIVATE_KEY,
-    };
-    // Create Wallet
-    var wallet = new ethers_1.ethers.Wallet("", provider);
-    // From BUSD 0xc4860463c59d59a9afac9fde35dff9da363e8425
-    // To bscBUSD 0x6d307636323688cc3fe618ccba695efc7a94f813
-    var fromToken = '0xc4860463c59d59a9afac9fde35dff9da363e8425'; // BUSD
-    viper.checkBalance(wallet, fromToken, "1");
-    res.send('Test Balance');
 });
 var port = process.env.PORT || 3000;
 app.listen(port, function () { return console.log("App listening on PORT " + port); });

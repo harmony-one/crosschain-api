@@ -1,7 +1,6 @@
 require("dotenv").config();
 
 const request = require('request');
-const web3 = require('web3');
 
 async function postRequest(url,body) {
   
@@ -34,7 +33,7 @@ async function main() {
         "ethAddress" : ethAddress
     }
 
-    await postRequest('http://localhost:3000/swap/bridge/',body)
+    await postRequest('http://localhost:3000/swap/bridge-out/',body)
  
   } catch (e) {
     console.error("Error: ", e.message, e.response?.body);
