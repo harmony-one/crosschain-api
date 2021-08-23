@@ -16,18 +16,9 @@ const { BridgeSDK, TOKEN, EXCHANGE_MODE, NETWORK_TYPE, ACTION_TYPE } = require('
 
 app.use(cors({origin:true,credentials: true}));
 
-app.get('/',(req, res) => {
-    res.send('Hello World!');
-});
-app.post('/lp/pair',(req, res) => {
-});
-app.post('/lp/explore',(req, res) => {
-  res.send('Hello Explore!');
-});
-
 // ENDPOINTS
 
-app.post('/lp/swap', async(req, res) => {
+app.post('/swap', async(req, res) => {
 
   const oneAddress = req.body.oneAddress
   const ethAddress = req.body.ethAddress 
@@ -71,18 +62,7 @@ app.post('/lp/swap', async(req, res) => {
 
 });
 
-app.post('/bridge/busd2bscbusd', async(req, res) => {
-
-  const amount = req.body.amount
-  const wallet = req.body.wallet
-
-  const result = await bridge.Bridge(wallet, amount);
-  console.log("result", await result);
-  res.send("Bridge");
-
-});
-
-app.post('/viper/swap', async(req, res) => {
+app.post('/swap/viper', async(req, res) => {
 
   const amount = req.body.amount
   const oneAddress = req.body.oneAddress

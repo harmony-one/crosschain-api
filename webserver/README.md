@@ -1,22 +1,96 @@
-# crosschain-api
-Welcome to Harmony's Crosschain API!
+# crosschain-api - Webserver
 
-This API will let you swap assets between different chains, this is the current status:
+This is a webserver deplyes using `node` and `express`, just need to run `npm install` and `npm run` to have it running. We assume that it will run in port 3000 but feel free to change it. Don't forget to update the scritps accordingly though.
 
-Version: B0.1
+## Endpoints
 
-* This version allow you to swap BUSD in Ethereum into BUSD in Binance, we thought this is a good first step because it will serve as a vehicle between any assets between the two networks.
 
-* Testnets required for running this versions are:
+The general architectur of the API is the following
 
-    * Harmony Testnet (https://api.s0.b.hmny.io)
-    * Ethereum Kovan (https://kovan.infura.io/v3/acb534b53d3a47b09d7886064f8e51b6)
-    * BSC Testnet (https://data-seed-prebsc-2-s1.binance.org:8545/)
+- You have a single endpoint to make swaps the `/swap`, this is a multi-step process that can fail if one of them fails. It uses Harmony's Horizon Bridge and Viper DEX, so for example, the bridging part can work but there is no liquidity in the pool so the who transaction will fail. Therefore use this enpoint only if you are sure that Viper's LPs have enough liquidity.
 
-### Some Basic Instructions
+- If you prefer to do it setp-by-step, you should use the following end-points in the specified order:
 
-* Right now you see two folders, `webserver` and `scripts`. The former contains the webserver that must be started to call the API endpoints locally in you machine (there is `.REDME` file there with more detailed instructions), he latter contains scripts in `javascript` and `postman` that can be used to test the endpoints once you have the webserber running and also as examples of how to make `GET` and `POST` calls.
+    - `/swap/bridge-in` - Bridges `BUSD` in ethereum to Harmony's `BUSD`
+    - `/swap/viper/` - Swaps Harmony's `BUSD` to `bscBUSD` (Both are bridged assets in the Harmony network)
+    - `/swap/bridge-out` - Bridges `bscBUSD` into Binance's `BUSD`
 
-* You will need to set `.env` files in both folders, we are adding samples for those files, you can just go ahead and rename them from `env_file` to `.env`, you will need to add your private key to the file in the scripts folder if you plan to use the `.js` file. If you plan to use postman, you will need to paste it into the workspace, so make sure that you create it outside the repo. In any case we encourage you to add `.env` files to the `.gitignore` and never paste you private keys in the code. 
+Right now the following endpoints are enabled, but we will keep adding more reguarly, so remember to pull once in a while.
 
-Enjoy!
+* `POST /swap` 
+
+This enpoint will swap balances between Ethereum BUSD and Binance BUSD, the body for this request should look like this:
+
+```
+{
+    "amount" : amount,
+    "wallet" : wallet,
+    "oneAddress" : oneAddress,
+    "ethAddress" : ethAddress
+}
+```
+
+- `amount`: this is a string with amount in decimals (e.g. "10.50") that you want to swap
+- `wallet`: this is the private key of the wallets with the funds, please use an `.env` or equivalent to store this key, never put it in your code
+- `oneAddress`: the address of the wallet owned by the private key in the Harmony wallet format i.e. `oneaxxxxxxxx`
+- `ethAddress`: the address of the wallet owned by the private key in the Ethereum wallet format i.e. `Oxaxxxxxxxx`
+
+You can see an example of this call in the `swap.js` file in the scripts folder of this repo
+
+* `POST /swap/bridge-in` 
+
+This enpoint will bridges `BUSD` in ethereum to Harmony's `BUSD`, it is the first step of the step-by-step swap, the body for this request should look like this:
+
+```
+{
+    "amount" : amount,
+    "wallet" : wallet,
+    "oneAddress" : oneAddress,
+    "ethAddress" : ethAddress
+}
+```
+
+- `amount`: this is a string with amount in decimals (e.g. "10.50") that you want to swap
+- `wallet`: this is the private key of the wallets with the funds, please use an `.env` or equivalent to store this key, never put it in your code
+- `oneAddress`: the address of the wallet owned by the private key in the Harmony wallet format i.e. `oneaxxxxxxxx`
+- `ethAddress`: the address of the wallet owned by the private key in the Ethereum wallet format i.e. `Oxaxxxxxxxx`
+
+You can see an example of this call in the `bridge-lock.js` file in the scripts folder of this repo
+
+* `POST /swap/viper` 
+
+This enpoint will swap Harmony's `BUSD` to `bscBUSD` (Both are bridged assets in the Harmony network), it is the second step of the step-by-step swap, the body for this request should look like this:
+
+```
+{
+    "amount" : amount,
+    "wallet" : wallet,
+    "oneAddress" : oneAddress,
+}
+```
+
+- `amount`: this is a string with amount in decimals (e.g. "10.50") that you want to swap
+- `wallet`: this is the private key of the wallets with the funds, please use an `.env` or equivalent to store this key, never put it in your code
+- `oneAddress`: the address of the wallet owned by the private key in the Harmony wallet format i.e. `oneaxxxxxxxx`
+
+You can see an example of this call in the `viper.js` file in the scripts folder of this repo
+
+* `POST /swap/bridge-out` 
+
+This enpoint will bridges `bscBUSD` into Binance's `BUSD`, it is the third step of the step-by-step swap, the body for this request should look like this:
+
+```
+{
+    "amount" : amount,
+    "wallet" : wallet,
+    "oneAddress" : oneAddress,
+    "ethAddress" : ethAddress
+}
+```
+
+- `amount`: this is a string with amount in decimals (e.g. "10.50") that you want to swap
+- `wallet`: this is the private key of the wallets with the funds, please use an `.env` or equivalent to store this key, never put it in your code
+- `oneAddress`: the address of the wallet owned by the private key in the Harmony wallet format i.e. `oneaxxxxxxxx`
+- `ethAddress`: the address of the wallet owned by the private key in the Ethereum wallet format i.e. `Oxaxxxxxxxx`
+
+You can see an example of this call in the `bridge-burn.js` file in the scripts folder of this repo
