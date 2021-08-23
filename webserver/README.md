@@ -35,7 +35,7 @@ This enpoint will swap balances between Ethereum BUSD and Binance BUSD, the body
 - `oneAddress`: the address of the wallet owned by the private key in the Harmony wallet format i.e. `oneaxxxxxxxx`
 - `ethAddress`: the address of the wallet owned by the private key in the Ethereum wallet format i.e. `Oxaxxxxxxxx`
 
-You can see an example of this call in the `swap.js` file in the scripts folder of this repo
+_You can see an example of this call in the `swap.js` file in the scripts folder of this repo_
 
 ### **`POST /swap/bridge-in`** 
 
@@ -55,7 +55,7 @@ This enpoint will bridges `BUSD` in ethereum to Harmony's `BUSD`, it is the firs
 - `oneAddress`: the address of the wallet owned by the private key in the Harmony wallet format i.e. `oneaxxxxxxxx`
 - `ethAddress`: the address of the wallet owned by the private key in the Ethereum wallet format i.e. `Oxaxxxxxxxx`
 
-You can see an example of this call in the `bridge-lock.js` file in the scripts folder of this repo
+_You can see an example of this call in the `bridge-lock.js` file in the scripts folder of this repo_
 
 ### **`POST /swap/viper`**
 
@@ -73,7 +73,7 @@ This enpoint will swap Harmony's `BUSD` to `bscBUSD` (Both are bridged assets in
 - `wallet`: this is the private key of the wallets with the funds, please use an `.env` or equivalent to store this key, never put it in your code
 - `oneAddress`: the address of the wallet owned by the private key in the Harmony wallet format i.e. `oneaxxxxxxxx`
 
-You can see an example of this call in the `viper.js` file in the scripts folder of this repo
+_You can see an example of this call in the `viper.js` file in the scripts folder of this repo_
 
 ### **`POST /swap/bridge-out`** 
 
@@ -93,4 +93,4 @@ This enpoint will bridges `bscBUSD` into Binance's `BUSD`, it is the third step 
 - `oneAddress`: the address of the wallet owned by the private key in the Harmony wallet format i.e. `oneaxxxxxxxx`
 - `ethAddress`: the address of the wallet owned by the private key in the Ethereum wallet format i.e. `Oxaxxxxxxxx`
 
-You can see an example of this call in the `bridge-burn.js` file in the scripts folder of this repo
+_You can see an example of this call in the `bridge-burn.js` file in the scripts folder of this repo_
