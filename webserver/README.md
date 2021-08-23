@@ -17,7 +17,7 @@ The general architectur of the API is the following
 
 Right now the following endpoints are enabled, but we will keep adding more reguarly, so remember to pull once in a while.
 
-* `POST /swap` 
+### **`POST /swap`** 
 
 This enpoint will swap balances between Ethereum BUSD and Binance BUSD, the body for this request should look like this:
 
@@ -37,7 +37,7 @@ This enpoint will swap balances between Ethereum BUSD and Binance BUSD, the body
 
 You can see an example of this call in the `swap.js` file in the scripts folder of this repo
 
-* _`POST /swap/bridge-in`_ 
+### **`POST /swap/bridge-in`** 
 
 This enpoint will bridges `BUSD` in ethereum to Harmony's `BUSD`, it is the first step of the step-by-step swap, the body for this request should look like this:
 
@@ -57,7 +57,7 @@ This enpoint will bridges `BUSD` in ethereum to Harmony's `BUSD`, it is the firs
 
 You can see an example of this call in the `bridge-lock.js` file in the scripts folder of this repo
 
-* `POST /swap/viper` 
+### **`POST /swap/viper`**
 
 This enpoint will swap Harmony's `BUSD` to `bscBUSD` (Both are bridged assets in the Harmony network), it is the second step of the step-by-step swap, the body for this request should look like this:
 
@@ -75,7 +75,7 @@ This enpoint will swap Harmony's `BUSD` to `bscBUSD` (Both are bridged assets in
 
 You can see an example of this call in the `viper.js` file in the scripts folder of this repo
 
-* `POST /swap/bridge-out` 
+### **`POST /swap/bridge-out`** 
 
 This enpoint will bridges `bscBUSD` into Binance's `BUSD`, it is the third step of the step-by-step swap, the body for this request should look like this:
 
