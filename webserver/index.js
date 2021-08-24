@@ -13,16 +13,54 @@ var cors=require('cors');
 
 app.use(cors({origin:true,credentials: true}));
 
-// ENDPOINTS
+// ENPOINTS
 
-app.post('/swap', async(req, res) => {
+app.post('/local/swap/bridge-in', async(req, res) => {
+
+  const amount = req.body.amount
+  const oneAddress = req.body.oneAddress
+  const ethAddress = req.body.ethAddress
+  const approveTxnHash = req.body.approveTxnHash
+  const lockTxnHash = req.body.lockTxnHash
+  
+  const result = await bridge.LockWithHash(approveTxnHash, lockTxnHash, oneAddress, ethAddress, amount);
+
+  console.log("result", await result);
+  res.send(result);
+
+});
+
+app.post('/local/swap/bridge-out', async(req, res) => {
+
+  const amount = req.body.amount
+  const oneAddress = req.body.oneAddress
+  const ethAddress = req.body.ethAddress
+  const approveTxnHash = req.body.approveTxnHash
+  const depositTxnHash = req.body.depositTxnHash
+  const burnTxnHash = req.body.burnTxnHash
+  
+  const result = await bridge.BurnWithHash(approveTxnHash, depositTxnHash, burnTxnHash, oneAddress, ethAddress, amount);
+
+  console.log("result", await result);
+  res.send(result);
+
+});
+
+// LOCAL ENDPOINTS
+
+app.post('/local/swap', async(req, res) => {
+
+  //TODO: if (await viper.checkBalance(wallet, toToken, "1") > -1)
 
   const oneAddress = req.body.oneAddress
   const ethAddress = req.body.ethAddress 
   const amount = req.body.amount
   const wallet = req.body.wallet
+
+  var isThereBusdBalance = false
+  var isThereBscBusdBalance = false
   
-  const result = await bridge.Bridge(0,
+  const lockResult = await bridge.Bridge(0,
     oneAddress,
     ethAddress,
     process.env.ETH_NODE_URL,
@@ -34,21 +72,32 @@ app.post('/swap', async(req, res) => {
     wallet, 
     amount);
 
-  if (result.success == true) {
-    console.log("Assets Successfully Bridged");
+  if (lockResult.success == true) {
+    console.log("Assets Successfully Bridged, swapping bridged assets");
     const provider = new ethers.providers.JsonRpcProvider(process.env.HARMONY_NODE_URL);
-    let wallet = new ethers.Wallet(req.body.wallet, provider);
+    let ethersWallet = new ethers.Wallet(req.body.wallet, provider);
     const fromToken = process.env.HMY_BUSD_CONTRACT
     const toToken = process.env.HMY_BSCBUSD_CONTRACT
-    const destinationAddress = oneAddress
+    const destinationAddress = ethAddress
 
-    const interval = setInterval( async function() {
-      if (await viper.checkBalance(wallet, fromToken, "1") > -1) {
-        clearInterval(interval);
-        viper.swapForToken(amount,wallet, fromToken, toToken, destinationAddress)
-      }
-    }, 5000);
-    res.send("Assets Successfully Bridged");
+    const swapResult = await viper.swapForToken(amount, ethersWallet, fromToken, toToken, destinationAddress)
+
+    if (lockResult.success == true) {
+      const result = await bridge.Bridge(1,
+      oneAddress,
+      ethAddress,
+      process.env.HARMONY_NODE_URL,
+      process.env.ETH_GAS_LIMIT,
+      './abi/BUSD.json', 
+      process.env.HMY_BSCBUSD_CONTRACT,
+      './abi/BridgeManager.json', 
+      process.env.HMY_BSCBUSD_MANAGER_CONTRACT, 
+      wallet, 
+      amount);
+    }
+
+    res.send("Assets Successfully swapped");
+
   } else {
     console.log("Assets Bridging Failed");
     res.send("Assets Bridging Failed");
@@ -56,7 +105,7 @@ app.post('/swap', async(req, res) => {
 
 });
 
-app.post('/swap/bridge-in', async(req, res) => {
+app.post('/local/swap/bridge-in', async(req, res) => {
 
   const amount = req.body.amount
   const wallet = req.body.wallet
@@ -80,7 +129,7 @@ app.post('/swap/bridge-in', async(req, res) => {
 
 });
 
-app.post('/swap/bridge-out', async(req, res) => {
+app.post('/local/swap/bridge-out', async(req, res) => {
 
   const amount = req.body.amount
   const wallet = req.body.wallet
@@ -99,16 +148,16 @@ app.post('/swap/bridge-out', async(req, res) => {
     wallet, 
     amount);
   
-
   console.log("result", await result);
   res.send(result);
 
 });
 
-app.post('/swap/viper', async(req, res) => {
+app.post('/local/swap/viper', async(req, res) => {
   
   const amount = req.body.amount
   const oneAddress = req.body.oneAddress
+  const ethAddress = req.body.ethAddress
   const provider = new ethers.providers.JsonRpcProvider(process.env.HARMONY_NODE_URL);
 
   // Create Wallet
@@ -116,7 +165,7 @@ app.post('/swap/viper', async(req, res) => {
 
   const fromToken = process.env.HMY_BUSD_CONTRACT
   const toToken = process.env.HMY_BSCBUSD_CONTRACT
-  const destinationAddress = oneAddress
+  const destinationAddress = ethAddress
 
   viper.swapForToken(amount,wallet, fromToken, toToken, destinationAddress)
   

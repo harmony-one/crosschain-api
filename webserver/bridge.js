@@ -11,12 +11,21 @@ module.exports.Bridge = async function(trx, oneAddress, ethAddress, node, gasLim
   return await bridge(trx, oneAddress, ethAddress, node, gasLimit, contractAbiJson, contractAddress, contractManagerAbiJson, contractManagerAddress, wallet, amount);
 }
 
+module.exports.LockWithHash = async function(approveTxnHash, lockTxnHash, oneAddress, ethAddress, amount) {
+  return await lockWithHash(approveTxnHash, lockTxnHash, oneAddress, ethAddress, amount);
+}
+
+module.exports.BurnWithHash = async function(approveTxnHash, depositTxnHash, burnTxnHash, oneAddress, ethAddress, amount) {
+  return await burnWithHash(approveTxnHash, depositTxnHash, burnTxnHash, oneAddress, ethAddress, amount);
+}
+
 // create and sign approve BUSD txn
 async function approveContractManager(node, gasLimit, abiJson, contractAddress, contractManagerAddress, wallet, amountInWei) {
   
   const web3 = new Web3(
     new Web3.providers.HttpProvider(node) 
   );
+  
   let account = web3.eth.accounts.privateKeyToAccount(wallet);
   web3.eth.accounts.wallet.add(account);
   web3.eth.defaultAccount = account.address;
@@ -37,6 +46,7 @@ async function approveContractManager(node, gasLimit, abiJson, contractAddress, 
 
 async function bridge(trx, oneAddress, ethAddress, node, gasLimit, contractAbiJson, contractAddress, contractManagerAbiJson, contractManagerAddress, wallet, amount) {
   try {
+    
     let fomattedAmount = web3.utils.toWei(amount, "ether");
     console.log("Node:", node)
     console.log("Gas Limit:", gasLimit)
@@ -74,4 +84,32 @@ async function bridge(trx, oneAddress, ethAddress, node, gasLimit, contractAbiJs
     return { trx: "bridge", success: false, error_message: e.message, error_body: e.response?.body}
   }
 }
+
+async function lockWithHash(approveTxnHash, lockTxnHash, oneAddress, ethAddress, amount) {
+  try {
+    let fomattedAmount = web3.utils.toWei(amount, "ether");
+    console.log("approveTxnHash", approveTxnHash);
+    console.log("Trx:", "Lock it!")
+    console.log("lockTxnHash", lockTxnHash);
+    await lock.Lock(approveTxnHash, lockTxnHash, oneAddress, ethAddress, fomattedAmount);
+    return { trx: "bridge", success: true, error_message: null, error_body: null}
+  } catch (e) {
+    return { trx: "bridge", success: false, error_message: e.message, error_body: e.response?.body}
+  }
+}
+
+async function burnWithHash(approveTxnHash, depositTxnHash, burnTxnHash, oneAddress, ethAddress, amount) {
+  try {
+    let fomattedAmount = web3.utils.toWei(amount, "ether");
+    console.log("Trx:", "Burn it!") 
+    console.log("approveTxnHash", approveTxnHash);
+    console.log("depositTxnHash", depositTxnHash);
+    console.log("burnTxnHash", burnTxnHash);
+    await burn.Burn(depositTxnHash, approveTxnHash, burnTxnHash, oneAddress, ethAddress, fomattedAmount);
+    return { trx: "bridge", success: true, error_message: null, error_body: null}
+  } catch (e) {
+    return { trx: "bridge", success: false, error_message: e.message, error_body: e.response?.body}
+  }
+}
+
 

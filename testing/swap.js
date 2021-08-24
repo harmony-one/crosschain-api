@@ -1,10 +1,7 @@
-
-var request = require('request');
-const ethers = require('ethers')
 require("dotenv").config();
 
-const BN = require("bn.js");
-const Web3 = require("web3");
+const request = require('request');
+const web3 = require('web3');
 
 async function postRequest(url,body) {
   
@@ -25,16 +22,19 @@ async function postRequest(url,body) {
 async function main() {
   try {
     
-    let wallet = process.env.PRIVATE_KEY;
-    let amount = "1";
-  
+    let wallet = process.env.PRIVATE_KEY
+    let amount = "0.01"
+    const oneAddress = process.env.SWAPPER_ONE_ADDRESS
+    const ethAddress = process.env.SWAPPER_ETH_ADDRESS
+
     const body = {
-      "oneAddress" : process.env.SWAPPER_ONE_ADDRESS,
       "amount" : amount,
-      "wallet" : wallet
+      "wallet" : wallet,
+      "oneAddress" : oneAddress,
+      "ethAddress" : ethAddress
     }
 
-    await postRequest('http://localhost:3000/viper/swap',body) 
+    await postRequest('http://localhost:3000/swap',body)
  
   } catch (e) {
     console.error("Error: ", e.message, e.response?.body);

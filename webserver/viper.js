@@ -5,7 +5,7 @@ const math = require('mathjs')
 var contracts = require('./contracts.js');
 
 module.exports.swapForToken = async function(amount, wallet, fromToken, toToken, destinationAddress) {
-  await swapForToken(amount, wallet, fromToken, toToken, destinationAddress);
+  return await swapForToken(amount, wallet, fromToken, toToken, destinationAddress);
 }
 
 module.exports.checkBalance = async function(amount, wallet, fromToken, toToken, destinationAddress) {
@@ -32,7 +32,7 @@ const checkBalance = async function(wallet, fromToken, amount) {
 }
 
 const swapForToken = async function(amount, wallet, fromToken, toToken, destinationAddress) {
-    
+
   destinationAddress = destinationAddress ? destinationAddress : wallet.address
   const parsedAmount = parseEther(amount)
 
@@ -47,6 +47,7 @@ const swapForToken = async function(amount, wallet, fromToken, toToken, destinat
   if (router && fromTokenContract && toTokenContract) {
     
     try {
+
       const fromTokenSymbol = await fromTokenContract.symbol()
       const toTokenSymbol = await toTokenContract.symbol()
       console.log(`Checking ${fromTokenSymbol} balance for ${wallet.address} ...`)
@@ -83,21 +84,18 @@ const swapForToken = async function(amount, wallet, fromToken, toToken, destinat
               gasLimit: 50000000
             }
           )
-    
           const receipt = await tx.wait()
           const success = receipt && receipt.status === 1
-          console.log(
-            `Swapped ${message} - Transaction receipt - tx hash: ${receipt.transactionHash}, success: ${success}\n`
-          )
-      } else {
-        console.log('Not swapping due to running in dry run mode')
+          return { trx: "swap", success: true, message: `Swapped ${message} - Transaction receipt - tx hash: ${receipt.transactionHash}, success: ${success}`}
+        } else {
+          return { trx: "swap", success: true, message: 'Not swapping due to running in dry run mode', error_body: "Only possible values are 0 or 1"}
         }
       }
     } catch (e) {
-      console.error("Error: ", e.message, e);
+      return { trx: "swap", success: false, error_message: e.message, error_body: e.response?.body}
     }
   } else {
-    console.log(`Couldn't find fromToken ${fromToken} or toToken ${toToken}`)
+    return { trx: "swap", success: false, error_message: `Couldn't swap fromToken ${fromToken} or toToken ${toToken}`, error_body: null}
   }
 }
 
