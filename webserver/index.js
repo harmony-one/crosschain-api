@@ -1,5 +1,5 @@
-import express from "express";
-import { ethers } from "ethers";
+const express = require("express");
+const ethers = require("ethers");
 
 require('dotenv').config()
 
@@ -7,8 +7,8 @@ const app = express();
 
 app.use(express.json());
 
-var bridge = require('../bridge.js');
-var viper = require('../viper.js');
+var bridge = require('./bridge.js');
+var viper = require('./viper.js');
 var cors=require('cors');
 
 app.use(cors({origin:true,credentials: true}));

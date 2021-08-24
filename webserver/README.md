@@ -1,6 +1,12 @@
 # Webserver
 
-This is a webserver uses `node` and `express`, just run `npm install` and `npm run` to have it running. We assume that it will run in port 3000 but feel free to change it. Don't forget to update the scritps accordingly though.
+This is a webserver using `node` and `express`, in order to start it you need to run the following commands in the terminal:
+
+* `npm install`
+
+* `node index.js`
+
+We assume that it will run in port 3000 but feel free to change it. Don't forget to update the scritps accordingly though.
 
 ## Endpoints
 

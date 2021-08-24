@@ -15,7 +15,7 @@ This API will let you swap assets between different chains, this is the current 
 
 ### Some Basic Instructions
 
-* Right now you see two folders, `webserver` and `scripts`. The former contains the webserver that must be started to call the API endpoints locally in you machine (there is `.REDME` file there with more detailed instructions), he latter contains scripts in `javascript` and `postman` that can be used to test the endpoints once you have the webserber running and also as examples of how to make `GET` and `POST` calls.
+* Right now you see two folders, `webserver` and `scripts`. The former contains the webserver that must be started to call the API endpoints locally in you machine (there is `.README` file there with more detailed instructions), he latter contains scripts in `javascript` and `postman` that can be used to test the endpoints once you have the webserber running and also as examples of how to make `GET` and `POST` calls.
 
 * You will need to set `.env` files in both folders, we are adding samples for those files, you can just go ahead and rename them from `env_file` to `.env`, you will need to add your private key to the file in the scripts folder if you plan to use the `.js` file. If you plan to use postman, you will need to paste it into the workspace, so make sure that you create it outside the repo. In any case we encourage you to add `.env` files to the `.gitignore` and never paste you private keys in the code. 
 
