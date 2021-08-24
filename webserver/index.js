@@ -15,7 +15,7 @@ app.use(cors({origin:true,credentials: true}));
 
 // ENPOINTS
 
-app.post('/local/swap/bridge-in', async(req, res) => {
+app.post('/swap/bridge-in', async(req, res) => {
 
   const amount = req.body.amount
   const oneAddress = req.body.oneAddress
@@ -30,7 +30,7 @@ app.post('/local/swap/bridge-in', async(req, res) => {
 
 });
 
-app.post('/local/swap/bridge-out', async(req, res) => {
+app.post('/swap/bridge-out', async(req, res) => {
 
   const amount = req.body.amount
   const oneAddress = req.body.oneAddress
