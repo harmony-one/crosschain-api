@@ -11,9 +11,9 @@ We assume that it will run in port 3000 but feel free to change it. Don't forget
 ## Endpoints
 
 
-The general architectur of the API is the following
+The general architecture of the API is the following
 
-- You have a single endpoint to make swaps the `/swap`, this is a multi-step process that can fail if one of them fails. It uses Harmony's Horizon Bridge and Viper DEX, so for example, the bridging part can work but there is no liquidity in the pool so the who transaction will fail. Therefore use this enpoint only if you are sure that Viper's LPs have enough liquidity.
+- You have a single endpoint to make swaps the `/swap`, this is a multi-step process that can fail if one of them fails. It uses Harmony's Horizon Bridge and Viper DEX, so for example, the bridging part can work but if there is no liquidity in the pool so the who transaction will fail. Therefore use this enpoint only if you are sure that Viper's LPs have enough liquidity.
 
 - If you prefer to do it setp-by-step, you should use the following end-points in the specified order:
 
