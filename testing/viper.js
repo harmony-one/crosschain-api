@@ -34,7 +34,7 @@ async function main() {
       "wallet" : wallet
     }
 
-    await postRequest('http://localhost:3000/swap/viper',body) 
+    await postRequest('http://localhost:3000/local/swap/viper',body) 
  
   } catch (e) {
     console.error("Error: ", e.message, e.response?.body);

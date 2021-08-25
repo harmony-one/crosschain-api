@@ -33,7 +33,7 @@ async function main() {
         "ethAddress" : ethAddress
     }
 
-    await postRequest('http://localhost:3000/swap/bridge-in/',body)
+    await postRequest('http://localhost:3000/local/swap/bridge-in/',body)
  
   } catch (e) {
     console.error("Error: ", e.message, e.response?.body);
