@@ -26,6 +26,10 @@ The general architecture of the API is the following
 
 Right now the following endpoints are enabled, but we will keep adding more reguarly, so remember to pull once in a while.
 
+## Production Endpoints ##
+
+TODO
+
 ## Local Endpoints ##
 
 ### **`POST /local/swap`** 
