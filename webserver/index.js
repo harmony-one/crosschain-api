@@ -53,9 +53,8 @@ app.post('/swap/viper', async(req, res) => {
   const destinationAddress = ethAddress
   const routerContract = req.body.routerContract
   const fromTokenContract = req.body.fromTokenContract
-  const fromToken = process.env.HMY_BUSD_CONTRACT
-  const toToken = process.env.HMY_BSCBUSD_CONTRACT
-  viper.swapForTokenWithContracts(amount, fromAddress, fromToken, toToken, destinationAddress, routerContract, fromTokenContract, toTokenContract)
+  
+  viper.swapForTokenWithContracts(amount, fromAddress, destinationAddress, routerContract, fromTokenContract, toTokenContract)
   res.send('Viper Swap');
 });
 

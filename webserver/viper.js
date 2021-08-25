@@ -98,7 +98,7 @@ const swapForToken = async function(amount, wallet, fromToken, toToken, destinat
   }
 }
 
-const swapForTokenWithContracts = async function(amount, address, fromToken, toToken, destinationAddress, routerContract, fromTokenContract, toTokenContract) {
+const swapForTokenWithContracts = async function(amount, address, destinationAddress, routerContract, fromTokenContract, toTokenContract) {
 
   destinationAddress = destinationAddress ? destinationAddress : address
   const parsedAmount = parseEther(amount)
@@ -156,7 +156,7 @@ const swapForTokenWithContracts = async function(amount, address, fromToken, toT
       return { trx: "swap", success: false, error_message: e.message, error_body: e.response?.body}
     }
   } else {
-    return { trx: "swap", success: false, error_message: `Couldn't swap fromToken ${fromToken} or toToken ${toToken}`, error_body: null}
+    return { trx: "swap", success: false, error_message: `Swap Failed`, error_body: null}
   }
 }
 
