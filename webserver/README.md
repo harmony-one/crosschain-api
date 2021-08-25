@@ -81,12 +81,44 @@ This enpoint will bridges `BUSD` in ethereum to Harmony's `BUSD`, it is the firs
 - `lockTxnHash` : this is a string with the hash of the lock transaction
 
 ### **`POST /swap/viper`**
+  
+This enpoint will swap Harmony's `BUSD` to `bscBUSD` (Both are bridged assets in the Harmony network), it is the second step of the step-by-step swap, the body for this request should look like this:
 
-TODO 
+```
+{
+    "amount" : amount,
+    "oneAddress" : oneAddress,
+    "ethAddress" : ethAddress
+    "routerContract" : routerContract
+    "fromTokenContract" : fromTokenContract
+}
+```
+
+- `amount`: this is a string with amount in decimals (e.g. "10.50") that you want to swap
+- `wallet`: this is the private key of the wallets with the funds, please use an `.env` or equivalent to store this key, never put it in your code
+- `oneAddress`: the address of the wallet owned by the private key in the Harmony wallet format i.e. `oneaxxxxxxxx`
+- `routerContract` : This is a string with the writing approval for Viper's swap router contract
+- `fromTokenContract` : This is a string with the transaction approval for the account swapping in Viper
 
 ### **`POST /swap/bridge-out`** 
+  
+```
+{
+    "amount" : amount,
+    "oneAddress" : oneAddress,
+    "ethAddress" : ethAddress,
+    "burnApproveTxnHash" : approveTxnHash,
+    "depositTxnHash" : depositTxnHash,
+    "burnTxnHash" : burnTxnHash
+}
+```
 
-TODO
+- `amount`: this is a string with amount in decimals (e.g. "10.50") that you want to swap
+- `oneAddress`: the address of the wallet owned by the private key in the Harmony wallet format i.e. `oneaxxxxxxxx`
+- `ethAddress`: the address of the wallet owned by the private key in the Ethereum wallet format i.e. `Oxaxxxxxxxx`
+- `burnApproveTxnHash` : this is a string with the hash of the contract manager's approval for the burn transaction
+- `depositTxnHash` : this is a string with the hash of the deposit transaction
+- `burnTxnHash` : this is a string with the hash of the burn transaction
 
 ## Local Endpoints ##
 
