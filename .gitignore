@@ -5,5 +5,5 @@
 .env
 */node_modules
 /old_contracts
-
+package-lock.json
 node_modules
