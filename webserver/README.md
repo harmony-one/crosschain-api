@@ -30,11 +30,55 @@ Right now the following endpoints are enabled, but we will keep adding more regu
 
 ### **`POST /swap`** 
 
-TODO
+This enpoint will swap balances between Ethereum BUSD and Binance BUSD, the body for this request should look like this:
+
+
+```
+{
+    "amount" : amount,
+    "oneAddress" : oneAddress,
+    "ethAddress" : ethAddress
+    "lockApproveTxnHash" : approveTxnHash
+    "lockTxnHash" : lockTxnHash
+    "burnApproveTxnHash" : approveTxnHash
+    "depositTxnHash" : depositTxnHash
+    "burnTxnHash" : burnTxnHash
+    "routerContract" : routerContract
+    "fromTokenContract" : fromTokenContract
+}
+```
+
+- `amount`: this is a string with the amount in decimals (e.g. "10.50") that you want to swap
+- `oneAddress`: this is a string with the address of the wallet owned by the private key in the Harmony wallet format i.e. `oneaxxxxxxxx`
+- `ethAddress`: this is a string with the address of the wallet owned by the private key in the Ethereum wallet format i.e. `Oxaxxxxxxxx`
+- `lockApproveTxnHash` : this is a string with the hash of the contract manager's approval for the lock transaction
+- `lockTxnHash` : this is a string with the hash of the lock transaction
+- `burnApproveTxnHash` : this is a string with the hash of the contract manager's approval for the burn transaction
+- `depositTxnHash` : this is a string with the hash of the deposit transaction
+- `burnTxnHash` : this is a string with the hash of the burn transaction
+- `routerContract` : This is a string with the writing approval for Viper's swap router contract
+- `fromTokenContract` : This is a string with the transaction approval for the account swapping in Viper
 
 ### **`POST /swap/bridge-in`** 
 
-TODO
+This enpoint will bridges `BUSD` in ethereum to Harmony's `BUSD`, it is the first step of the step-by-step swap, the body for this request should look like this:
+
+
+```
+{
+    "amount" : amount,
+    "oneAddress" : oneAddress,
+    "ethAddress" : ethAddress,
+    "lockApproveTxnHash" : approveTxnHash,
+    "lockTxnHash" : lockTxnHash
+}
+```
+
+- `amount`: this is a string with amount in decimals (e.g. "10.50") that you want to swap
+- `oneAddress`: the address of the wallet owned by the private key in the Harmony wallet format i.e. `oneaxxxxxxxx`
+- `ethAddress`: the address of the wallet owned by the private key in the Ethereum wallet format i.e. `Oxaxxxxxxxx`
+- `lockApproveTxnHash` : this is a string with the hash of the contract manager's approval for the lock transaction
+- `lockTxnHash` : this is a string with the hash of the lock transaction
 
 ### **`POST /swap/viper`**
 
