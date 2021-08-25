@@ -10,7 +10,6 @@ We assume that it will run in port 3000 but feel free to change it. Don't forget
 
 ## Endpoints
 
-
 The general architecture of the API is the following
 
 - There are two types of endpoints 
@@ -27,9 +26,7 @@ The general architecture of the API is the following
 
 Right now the following endpoints are enabled, but we will keep adding more reguarly, so remember to pull once in a while.
 
-```
-Local Endpoints
-```
+## Local Endpoints ##
 
 ### **`POST /local/swap`** 
 
