@@ -28,6 +28,20 @@ Right now the following endpoints are enabled, but we will keep adding more regu
 
 ## Production Endpoints ##
 
+### **`POST /swap`** 
+
+TODO
+
+### **`POST /swap/bridge-in`** 
+
+TODO
+
+### **`POST /swap/viper`**
+
+TODO 
+
+### **`POST /swap/bridge-out`** 
+
 TODO
 
 ## Local Endpoints ##
