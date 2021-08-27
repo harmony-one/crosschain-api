@@ -16,7 +16,7 @@ async function approveBUSDEthManager(amountInWei) {
   // Get autheticated Web3 provider
   const web3 = new Web3(
     new Web3.providers.HttpProvider(process.env.ETH_NODE_URL)
-  );
+  )
   let account = web3.eth.accounts.privateKeyToAccount(process.env.PRIVATE_KEY)
   web3.eth.accounts.wallet.add(account);
   web3.eth.defaultAccount = account.address;
@@ -25,7 +25,7 @@ async function approveBUSDEthManager(amountInWei) {
   const busdContract = new web3.eth.Contract(
     busdJson.abi,
     process.env.ETH_BUSD_CONTRACT
-  );
+  )
   // approve the transaction
   let transaction = await busdContract.methods
     .approve(process.env.ETH_BUSD_MANAGER_CONTRACT, amountInWei)
@@ -33,7 +33,7 @@ async function approveBUSDEthManager(amountInWei) {
       from: account.address,
       gas: process.env.ETH_GAS_LIMIT,
       gasPrice: new BN(await web3.eth.getGasPrice()).mul(new BN(1)),
-    });
+    })
   return transaction.transactionHash;
 }
 
@@ -46,7 +46,7 @@ async function lockTxn(amountInWei) {
   // Get autheticated Web3 provider
   const web3 = new Web3(
     new Web3.providers.HttpProvider(process.env.ETH_NODE_URL)
-  );
+  )
   let account = web3.eth.accounts.privateKeyToAccount(process.env.PRIVATE_KEY)
   web3.eth.accounts.wallet.add(account);
   web3.eth.defaultAccount = account.address;
@@ -55,7 +55,7 @@ async function lockTxn(amountInWei) {
   const busdContract = new web3.eth.Contract(
     busdJson.abi,
     process.env.ETH_BUSD_MANAGER_CONTRACT
-  );
+  )
   // approve the transaction
   let transaction = await busdContract.methods
     .lockToken(amountInWei, account.address)
@@ -63,7 +63,7 @@ async function lockTxn(amountInWei) {
       from: account.address,
       gas: process.env.ETH_GAS_LIMIT,
       gasPrice: new BN(await web3.eth.getGasPrice()).mul(new BN(1)),
-    });
+    })
   return transaction.transactionHash;
 }
 
@@ -129,8 +129,8 @@ async function main() {
     setTimeout(() => {
       await perform(approveTxnHash, lockTxnHash, amount, oneAddress, ethAddress).then(() => {
         console.log("done")
-      });
-    }, 10000);
+      })
+    }, 10000)
   } catch (e) {
     console.error("Error: ", e.message, e.response?.body)
   }

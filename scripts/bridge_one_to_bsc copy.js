@@ -63,8 +63,8 @@ async function deposit() {
       gas: process.env.ETH_GAS_LIMIT,
       gasPrice: new BN(await web3.eth.getGasPrice()).mul(new BN(1)),
       value: web3.utils.toWei("15", "ether"),
-    });
-  return response.transactionHash;
+    })
+  return response.transactionHash
 }
 
 /* Create and sign a burn transaction in the Harmony Bridge
@@ -76,7 +76,7 @@ async function burnTxn(amountInWei) {
   // Get autheticated Web3 provider
   const web3 = new Web3(
     new Web3.providers.HttpProvider(process.env.HARMONY_NODE_URL)
-  );
+  )
   let account = web3.eth.accounts.privateKeyToAccount(process.env.PRIVATE_KEY)
   web3.eth.accounts.wallet.add(account)
   web3.eth.defaultAccount = account.address
@@ -93,7 +93,7 @@ async function burnTxn(amountInWei) {
       from: account.address,
       gas: process.env.ETH_GAS_LIMIT,
       gasPrice: new BN(await web3.eth.getGasPrice()).mul(new BN(1)),
-    });
+    })
   return transaction.transactionHash;
 }
 
@@ -165,7 +165,7 @@ async function main() {
     setTimeout(() => {
       await perform(amount, approveTxnHash, depositTxnHash, burnTxnHash, oneAddress, ethAddress).then(() => {
         console.log("done")
-      });
+      })
     }, 10000)
   } catch (e) {
     console.error("Error: ", e.message, e.response?.body)
