@@ -1,13 +1,6 @@
 require("dotenv").config()
-const {
-  BridgeSDK,
-  TOKEN,
-  EXCHANGE_MODE,
-  NETWORK_TYPE,
-  ACTION_TYPE,
-} = require("bridge-sdk");
-const BN = require("bn.js");
-const Web3 = require("web3");
+const BN = require("bn.js")
+const Web3 = require("web3")
 const web3 = new Web3(
   new Web3.providers.HttpProvider(process.env.HARMONY_NODE_URL)
 );
@@ -24,11 +17,11 @@ async function approveBUSDEthManager(amountInWei) {
   const web3 = new Web3(
     new Web3.providers.HttpProvider(process.env.ETH_NODE_URL)
   );
-  let account = web3.eth.accounts.privateKeyToAccount(process.env.PRIVATE_KEY);
+  let account = web3.eth.accounts.privateKeyToAccount(process.env.PRIVATE_KEY)
   web3.eth.accounts.wallet.add(account);
   web3.eth.defaultAccount = account.address;
   // retrieve BUSD contract
-  const busdJson = require("./abi/BUSD.json");
+  const busdJson = require("./abi/BUSD.json")
   const busdContract = new web3.eth.Contract(
     busdJson.abi,
     process.env.ETH_BUSD_CONTRACT
@@ -54,11 +47,11 @@ async function lockTxn(amountInWei) {
   const web3 = new Web3(
     new Web3.providers.HttpProvider(process.env.ETH_NODE_URL)
   );
-  let account = web3.eth.accounts.privateKeyToAccount(process.env.PRIVATE_KEY);
+  let account = web3.eth.accounts.privateKeyToAccount(process.env.PRIVATE_KEY)
   web3.eth.accounts.wallet.add(account);
   web3.eth.defaultAccount = account.address;
   // retrieve BUSDEthManager contract
-  const busdJson = require("./abi/BUSDEthManager.json");
+  const busdJson = require("./abi/BUSDEthManager.json")
   const busdContract = new web3.eth.Contract(
     busdJson.abi,
     process.env.ETH_BUSD_MANAGER_CONTRACT
@@ -127,11 +120,11 @@ async function main() {
     const ethAddress = "Your To Address"
     let amount = web3.utils.toWei("1", "ether");
     // get the Ethereum BUSD Manager Contract Approval hash
-    const approveTxnHash = await approveBUSDEthManager(amount);
-    console.log("approveTxnHash", approveTxnHash);
+    const approveTxnHash = await approveBUSDEthManager(amount)
+    console.log("approveTxnHash", approveTxnHash)
     // get the Lock transaction hash
-    const lockTxnHash = await lockTxn(amount);
-    console.log("lockTxnHash", lockTxnHash);
+    const lockTxnHash = await lockTxn(amount)
+    console.log("lockTxnHash", lockTxnHash)
     setTimeout(() => {
       // send the transaction to the API
       perform(approveTxnHash, lockTxnHash, amount, oneAddress, ethAddress).then(() => {
@@ -139,8 +132,8 @@ async function main() {
       });
     }, 10000);
   } catch (e) {
-    console.error("Error: ", e.message, e.response?.body);
+    console.error("Error: ", e.message, e.response?.body)
   }
 }
 
-main().then(() => {});
+main().then(() => {})
