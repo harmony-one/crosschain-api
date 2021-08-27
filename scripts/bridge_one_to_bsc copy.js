@@ -17,7 +17,7 @@ async function approveBridgeManager(amountInWei) {
   const web3 = new Web3(
     new Web3.providers.HttpProvider(process.env.HARMONY_NODE_URL)
   )
-  let account = web3.eth.accounts.privateKeyToAccount(process.env.PRIVATE_KEY);
+  let account = web3.eth.accounts.privateKeyToAccount(process.env.PRIVATE_KEY)
   web3.eth.accounts.wallet.add(account);
   web3.eth.defaultAccount = account.address;
   // retrieve BUSD contract
@@ -46,11 +46,11 @@ async function deposit() {
   const web3 = new Web3(
     new Web3.providers.HttpProvider(process.env.HARMONY_NODE_URL)
   )
-  let account = web3.eth.accounts.privateKeyToAccount(process.env.PRIVATE_KEY);
+  let account = web3.eth.accounts.privateKeyToAccount(process.env.PRIVATE_KEY)
   web3.eth.accounts.wallet.add(account);
   web3.eth.defaultAccount = account.address;
   // retrieve Deposit contract
-  const contractJson = require("./abi/Deposit.json");
+  const contractJson = require("./abi/Deposit.json")
   const contract = new web3.eth.Contract(
     contractJson.abi, 
     process.env.DEPOSIT
@@ -77,7 +77,7 @@ async function burnTxn(amountInWei) {
   const web3 = new Web3(
     new Web3.providers.HttpProvider(process.env.HARMONY_NODE_URL)
   );
-  let account = web3.eth.accounts.privateKeyToAccount(process.env.PRIVATE_KEY);
+  let account = web3.eth.accounts.privateKeyToAccount(process.env.PRIVATE_KEY)
   web3.eth.accounts.wallet.add(account)
   web3.eth.defaultAccount = account.address
   // retrieve BridgeManager contract
@@ -151,24 +151,24 @@ async function main() {
     // Set initial values
     const oneAddress = "Your From Address"
     const ethAddress = "Your To Address"
-    let amount = web3.utils.toWei("1", "ether");
+    let amount = web3.utils.toWei("1", "ether")
     // get the Bridge Manager Contract Approval hash
-    const approveTxnHash = await approveBridgeManager(amount);
-    console.log("approveTxnHash", approveTxnHash);
+    const approveTxnHash = await approveBridgeManager(amount)
+    console.log("approveTxnHash", approveTxnHash)
     // get the deposit transaction hash
-    const depositTxnHash = await deposit();
-    console.log("depositTxnHash", depositTxnHash);
+    const depositTxnHash = await deposit()
+    console.log("depositTxnHash", depositTxnHash)
     // get the burn transaction hash
-    const burnTxnHash = await burnTxn(node, gasLimit, contractManagerAbiJson, contractManagerAddress, wallet, fomattedAmount);
-    console.log("burnTxnHash", burnTxnHash);
+    const burnTxnHash = await burnTxn(node, gasLimit, contractManagerAbiJson, contractManagerAddress, wallet, fomattedAmount)
+    console.log("burnTxnHash", burnTxnHash)
     // send the transaction to the API
     setTimeout(() => {
       await perform(amount, approveTxnHash, depositTxnHash, burnTxnHash, oneAddress, ethAddress).then(() => {
-        console.log("done");
+        console.log("done")
       });
-    }, 10000);
+    }, 10000)
   } catch (e) {
-    console.error("Error: ", e.message, e.response?.body);
+    console.error("Error: ", e.message, e.response?.body)
   }
 }
 
