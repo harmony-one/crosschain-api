@@ -1,11 +1,4 @@
 require("dotenv").config()
-const {
-  BridgeSDK,
-  TOKEN,
-  EXCHANGE_MODE,
-  NETWORK_TYPE,
-  ACTION_TYPE,
-} = require("bridge-sdk")
 const BN = require("bn.js")
 const Web3 = require("web3")
 const web3 = new Web3(
