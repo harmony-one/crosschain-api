@@ -21,7 +21,7 @@ async function approveBUSDEthManager(amountInWei) {
   web3.eth.accounts.wallet.add(account);
   web3.eth.defaultAccount = account.address;
   // retrieve BUSD contract
-  const busdJson = require("./abi/BUSD.json");
+  const busdJson = require("./abi/BUSD.json")
   const busdContract = new web3.eth.Contract(
     busdJson.abi,
     process.env.ETH_BUSD_CONTRACT
@@ -51,7 +51,7 @@ async function lockTxn(amountInWei) {
   web3.eth.accounts.wallet.add(account);
   web3.eth.defaultAccount = account.address;
   // retrieve BUSDEthManager contract
-  const busdJson = require("./abi/BUSDEthManager.json");
+  const busdJson = require("./abi/BUSDEthManager.json")
   const busdContract = new web3.eth.Contract(
     busdJson.abi,
     process.env.ETH_BUSD_MANAGER_CONTRACT
@@ -128,7 +128,7 @@ async function main() {
     // send the transaction to the API
     setTimeout(() => {
       await perform(approveTxnHash, lockTxnHash, amount, oneAddress, ethAddress).then(() => {
-        console.log("done");
+        console.log("done")
       });
     }, 10000);
   } catch (e) {
