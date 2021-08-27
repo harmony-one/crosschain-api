@@ -5,8 +5,12 @@ const ROUTER_ABI = require('@viperswap/periphery/build/IUniswapV2Router02.json')
 const IERC20_ABI = require('@venomswap/periphery/build/IERC20.json').abi
 const IUNISWAPV2PAIR_ABI = require('@viperswap/periphery/build/IUniswapV2Pair.json').abi
 const MASTER_BREEDER_ABI = require('@venomswap/contracts/build/MasterBreeder.json').abi
-const ChainId = require('@venomswap/sdk').ChainId
 
+/* Retrieve Viper's router contract
+ * @param {string} chainId
+ * @param {string} walletOrProvider
+ * @return ethers Contract object
+*/
 module.exports.getRouterContract = function(
     chainId,
     walletOrProvider
@@ -18,14 +22,23 @@ module.exports.getRouterContract = function(
     return undefined
   }
   
+  /* Retrieve Viper's ERC20 token contract
+   * @param {string} chainId
+   * @param {string} walletOrProvider
+   * @return ethers Contract object
+  */
   module.exports.getTokenContract = function(
-    chainId,
     addressOrSymbol,
     walletOrProvider
   ) {
     return new ethers.Contract(addressOrSymbol, IERC20_ABI, walletOrProvider)
   }
   
+  /* Retrieve Uniswap's pair contract
+   * @param {string} pairAddress
+   * @param {string} walletOrProvider
+   * @return ethers Contract object
+  */
   module.exports.getPairContract = function(
     pairAddress,
     walletOrProvider
@@ -36,6 +49,11 @@ module.exports.getRouterContract = function(
     return undefined
   }
   
+  /* Retrieve Viper's MasterBreeders's contract
+   * @param {string} chainId
+   * @param {string} walletOrProvider
+   * @return ethers Contract object
+  */
   module.exports.getMasterBreederContract = function(
     chainId,
     walletOrProvider
