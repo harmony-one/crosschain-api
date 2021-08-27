@@ -10,7 +10,7 @@ const https = require('https')
 /* Create and sign a transaction to approve the Ethereum BUSD
  * manager contract.
  * @param {BigNumber} amountInWei
- * @retun {string} Ethereum BUSD Manager Contract Approval hash
+ * @return {string} Ethereum BUSD Manager Contract Approval hash
 */
 async function approveBUSDEthManager(amountInWei) {
   // Get autheticated Web3 provider
@@ -40,7 +40,7 @@ async function approveBUSDEthManager(amountInWei) {
 /* Create and sign a lock transaction in the Ethereum BUSD
  * manager contract.
  * @param {BigNumber} amountInWei
- * @retun {string} Lock transaction Approval hash
+ * @return {string} Lock transaction Approval hash
 */
 async function lockTxn(amountInWei) {
   // Get autheticated Web3 provider

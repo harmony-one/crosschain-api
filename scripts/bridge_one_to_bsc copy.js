@@ -10,7 +10,7 @@ const https = require('https')
 /* Create and sign a transaction to approve the Harmony Bridge
  * manager contract.
  * @param {BigNumber} amountInWei
- * @retun {string} Harmony Bridge Manager Contract Approval hash
+ * @return {string} Harmony Bridge Manager Contract Approval hash
 */
 async function approveBridgeManager(amountInWei) {
   // Get autheticated Web3 provider
@@ -39,7 +39,7 @@ async function approveBridgeManager(amountInWei) {
 
 /* Create and sign a deposit transaction in the Harmony Bridge
  * manager contract.
- * @retun {string} deposit transaction Approval hash
+ * @return {string} deposit transaction Approval hash
 */
 async function deposit() {
   // Get autheticated Web3 provider
@@ -70,7 +70,7 @@ async function deposit() {
 /* Create and sign a burn transaction in the Harmony Bridge
  * manager contract.
  * @param {BigNumber} amountInWei
- * @retun {string} burn transaction Approval hash
+ * @return {string} burn transaction Approval hash
 */
 async function burnTxn(amountInWei) {
   // Get autheticated Web3 provider
