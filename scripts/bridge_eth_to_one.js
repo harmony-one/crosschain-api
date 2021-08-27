@@ -1,13 +1,6 @@
 require("dotenv").config()
-const {
-  BridgeSDK,
-  TOKEN,
-  EXCHANGE_MODE,
-  NETWORK_TYPE,
-  ACTION_TYPE,
-} = require("bridge-sdk");
-const BN = require("bn.js");
-const Web3 = require("web3");
+const BN = require("bn.js")
+const Web3 = require("web3")
 const web3 = new Web3(
   new Web3.providers.HttpProvider(process.env.HARMONY_NODE_URL)
 );
@@ -24,7 +17,7 @@ async function approveBUSDEthManager(amountInWei) {
   const web3 = new Web3(
     new Web3.providers.HttpProvider(process.env.ETH_NODE_URL)
   );
-  let account = web3.eth.accounts.privateKeyToAccount(process.env.PRIVATE_KEY);
+  let account = web3.eth.accounts.privateKeyToAccount(process.env.PRIVATE_KEY)
   web3.eth.accounts.wallet.add(account);
   web3.eth.defaultAccount = account.address;
   // retrieve BUSD contract
@@ -54,7 +47,7 @@ async function lockTxn(amountInWei) {
   const web3 = new Web3(
     new Web3.providers.HttpProvider(process.env.ETH_NODE_URL)
   );
-  let account = web3.eth.accounts.privateKeyToAccount(process.env.PRIVATE_KEY);
+  let account = web3.eth.accounts.privateKeyToAccount(process.env.PRIVATE_KEY)
   web3.eth.accounts.wallet.add(account);
   web3.eth.defaultAccount = account.address;
   // retrieve BUSDEthManager contract
@@ -125,22 +118,22 @@ async function main() {
     // Set initial values
     const oneAddress = "Your From Address"
     const ethAddress = "Your To Address"
-    let amount = web3.utils.toWei("1", "ether");
+    let amount = web3.utils.toWei("1", "ether")
     // get the Ethereum BUSD Manager Contract Approval hash
-    const approveTxnHash = await approveBUSDEthManager(amount);
-    console.log("approveTxnHash", approveTxnHash);
+    const approveTxnHash = await approveBUSDEthManager(amount)
+    console.log("approveTxnHash", approveTxnHash)
     // get the Lock transaction hash
-    const lockTxnHash = await lockTxn(amount);
-    console.log("lockTxnHash", lockTxnHash);
+    const lockTxnHash = await lockTxn(amount)
+    console.log("lockTxnHash", lockTxnHash)
+    // send the transaction to the API
     setTimeout(() => {
-      // send the transaction to the API
-      perform(approveTxnHash, lockTxnHash, amount, oneAddress, ethAddress).then(() => {
+      await perform(approveTxnHash, lockTxnHash, amount, oneAddress, ethAddress).then(() => {
         console.log("done");
       });
     }, 10000);
   } catch (e) {
-    console.error("Error: ", e.message, e.response?.body);
+    console.error("Error: ", e.message, e.response?.body)
   }
 }
 
-main().then(() => {});
+main().then(() => {})
