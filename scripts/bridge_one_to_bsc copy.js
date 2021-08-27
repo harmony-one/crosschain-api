@@ -17,9 +17,9 @@ async function approveBridgeManager(amountInWei) {
   const web3 = new Web3(
     new Web3.providers.HttpProvider(process.env.HARMONY_NODE_URL)
   )
-  let account = web3.eth.accounts.privateKeyToAccount(process.env.PRIVATE_KEY);
-  web3.eth.accounts.wallet.add(account);
-  web3.eth.defaultAccount = account.address;
+  let account = web3.eth.accounts.privateKeyToAccount(process.env.PRIVATE_KEY)
+  web3.eth.accounts.wallet.add(account)
+  web3.eth.defaultAccount = account.address
   // retrieve BUSD contract
   const busdJson = require("./abi/BUSD.json")
   const busdContract = new web3.eth.Contract(
@@ -46,11 +46,11 @@ async function deposit() {
   const web3 = new Web3(
     new Web3.providers.HttpProvider(process.env.HARMONY_NODE_URL)
   )
-  let account = web3.eth.accounts.privateKeyToAccount(process.env.PRIVATE_KEY);
-  web3.eth.accounts.wallet.add(account);
-  web3.eth.defaultAccount = account.address;
+  let account = web3.eth.accounts.privateKeyToAccount(process.env.PRIVATE_KEY)
+  web3.eth.accounts.wallet.add(account)
+  web3.eth.defaultAccount = account.address
   // retrieve Deposit contract
-  const contractJson = require("./abi/Deposit.json");
+  const contractJson = require("./abi/Deposit.json")
   const contract = new web3.eth.Contract(
     contractJson.abi, 
     process.env.DEPOSIT
@@ -64,7 +64,7 @@ async function deposit() {
       gasPrice: new BN(await web3.eth.getGasPrice()).mul(new BN(1)),
       value: web3.utils.toWei("15", "ether"),
     });
-  return response.transactionHash;
+  return response.transactionHash
 }
 
 /* Create and sign a burn transaction in the Harmony Bridge
@@ -77,7 +77,7 @@ async function burnTxn(amountInWei) {
   const web3 = new Web3(
     new Web3.providers.HttpProvider(process.env.HARMONY_NODE_URL)
   );
-  let account = web3.eth.accounts.privateKeyToAccount(process.env.PRIVATE_KEY);
+  let account = web3.eth.accounts.privateKeyToAccount(process.env.PRIVATE_KEY)
   web3.eth.accounts.wallet.add(account)
   web3.eth.defaultAccount = account.address
   // retrieve BridgeManager contract
@@ -94,7 +94,7 @@ async function burnTxn(amountInWei) {
       gas: process.env.ETH_GAS_LIMIT,
       gasPrice: new BN(await web3.eth.getGasPrice()).mul(new BN(1)),
     });
-  return transaction.transactionHash;
+  return transaction.transactionHash
 }
 
 /* Receives all the required information to send a POST request
@@ -153,22 +153,22 @@ async function main() {
     const ethAddress = "Your To Address"
     let amount = web3.utils.toWei("1", "ether");
     // get the Bridge Manager Contract Approval hash
-    const approveTxnHash = await approveBridgeManager(amount);
-    console.log("approveTxnHash", approveTxnHash);
+    const approveTxnHash = await approveBridgeManager(amount)
+    console.log("approveTxnHash", approveTxnHash)
     // get the deposit transaction hash
     const depositTxnHash = await deposit();
-    console.log("depositTxnHash", depositTxnHash);
+    console.log("depositTxnHash", depositTxnHash)
     // get the burn transaction hash
-    const burnTxnHash = await burnTxn(node, gasLimit, contractManagerAbiJson, contractManagerAddress, wallet, fomattedAmount);
-    console.log("burnTxnHash", burnTxnHash);
+    const burnTxnHash = await burnTxn(node, gasLimit, contractManagerAbiJson, contractManagerAddress, wallet, fomattedAmount)
+    console.log("burnTxnHash", burnTxnHash)
     // send the transaction to the API
     setTimeout(() => {
       await perform(amount, approveTxnHash, depositTxnHash, burnTxnHash, oneAddress, ethAddress).then(() => {
-        console.log("done");
+        console.log("done")
       });
-    }, 10000);
+    }, 10000)
   } catch (e) {
-    console.error("Error: ", e.message, e.response?.body);
+    console.error("Error: ", e.message, e.response?.body)
   }
 }
 
