@@ -80,7 +80,7 @@ This enpoint will bridges `BUSD` in ethereum to Harmony's `BUSD`, it is the firs
 - `lockApproveTxnHash` : this is a string with the hash of the contract manager's approval for the lock transaction
 - `lockTxnHash` : this is a string with the hash of the lock transaction
 
-_You can see an example of this call in the `bridge_eth_to_one.js` file in the (scripts folder)[https://github.com/harmony-one/crosschain-api/tree/dev/scripts] of this repo_
+_You can see an example of this call in the `bridge_eth_to_one.js` file in the [scripts folder](https://github.com/harmony-one/crosschain-api/tree/dev/scripts) of this repo_
 
 ### **`POST /swap/viper`**
   
@@ -102,7 +102,7 @@ This enpoint will swap Harmony's `BUSD` to `bscBUSD` (Both are bridged assets in
 - `routerContract` : This is a string with the writing approval for Viper's swap router contract
 - `fromTokenContract` : This is a string with the transaction approval for the account swapping in Viper
 
-_You can see an example of this call in the `viper_swap.js` file in the (scripts folder)[https://github.com/harmony-one/crosschain-api/tree/dev/scripts] of this repo_
+_You can see an example of this call in the `viper_swap.js` file in the [scripts folder](https://github.com/harmony-one/crosschain-api/tree/dev/scripts) of this repo_
 
 ### **`POST /swap/bridge-out`** 
   
@@ -124,7 +124,7 @@ _You can see an example of this call in the `viper_swap.js` file in the (scripts
 - `depositTxnHash` : this is a string with the hash of the deposit transaction
 - `burnTxnHash` : this is a string with the hash of the burn transaction
 
-_You can see an example of this call in the `bridge_one_to_bsc.js` file in the (scripts folder)[https://github.com/harmony-one/crosschain-api/tree/dev/scripts] of this repo_
+_You can see an example of this call in the `bridge_one_to_bsc.js` file in the [scripts folder](https://github.com/harmony-one/crosschain-api/tree/dev/scripts) of this repo_
 
 ## Local Endpoints ##
 
