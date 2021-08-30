@@ -1,4 +1,4 @@
-const BN = require("bn.js")
+require("dotenv").config()
 const Web3 = require("web3")
 const https = require('https')
 var contracts = require('./contracts.js')
@@ -65,9 +65,9 @@ async function main() {
     let amount = web3.utils.toWei("1", "ether")
     const destinationAddress = ethAddress
     // get the Viper contracts
-    const routerContract = contracts.getRouterContract(ChainId.HARMONY_TESTNET, wallet)
-    const fromTokenContract = await contracts.getTokenContract(fromAddress, wallet)
-    const toTokenContract = await contracts.getTokenContract(toAddress, wallet)
+    const routerContract = contracts.getRouterContract(ChainId.HARMONY_TESTNET, process.env.PRIVATE_KEY)
+    const fromTokenContract = await contracts.getTokenContract(fromAddress, process.env.PRIVATE_KEY)
+    const toTokenContract = await contracts.getTokenContract(toAddress, process.env.PRIVATE_KEY)
     // send the transaction to the API
     setTimeout(() => {
       await perform(amount, fromAddress, toAddress, routerContract, fromTokenContract, toTokenContract).then(() => {

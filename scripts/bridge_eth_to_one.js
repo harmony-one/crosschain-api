@@ -3,8 +3,7 @@ const BN = require("bn.js")
 const Web3 = require("web3")
 const web3 = new Web3(
   new Web3.providers.HttpProvider(process.env.HARMONY_NODE_URL)
-);
-const configs = require("bridge-sdk/lib/configs")
+)
 const https = require('https')
 
 /* Create and sign a transaction to approve the Ethereum BUSD
@@ -14,9 +13,6 @@ const https = require('https')
 */
 async function approveBUSDEthManager(amountInWei) {
   // Get autheticated Web3 provider
-  const web3 = new Web3(
-    new Web3.providers.HttpProvider(process.env.ETH_NODE_URL)
-  )
   let account = web3.eth.accounts.privateKeyToAccount(process.env.PRIVATE_KEY)
   web3.eth.accounts.wallet.add(account);
   web3.eth.defaultAccount = account.address;
@@ -44,9 +40,6 @@ async function approveBUSDEthManager(amountInWei) {
 */
 async function lockTxn(amountInWei) {
   // Get autheticated Web3 provider
-  const web3 = new Web3(
-    new Web3.providers.HttpProvider(process.env.ETH_NODE_URL)
-  )
   let account = web3.eth.accounts.privateKeyToAccount(process.env.PRIVATE_KEY)
   web3.eth.accounts.wallet.add(account);
   web3.eth.defaultAccount = account.address;
