@@ -74,17 +74,16 @@ app.post('/swap', async(req, res) => {
   const fromTokenContract = req.body.fromTokenContract
   const destinationAddress = ethAddress
   
-  const lockResult = await bridge.LockWithHash(approveTxnHash, lockTxnHash, oneAddress, ethAddress, amount);
+  const lockResult = await bridge.LockWithHash(lockApproveTxnHash, lockTxnHash, oneAddress, ethAddress, amount);
 
   if (lockResult.success == true) {
     console.log("Assets Successfully Bridged, swapping bridged assets");
     const fromToken = process.env.HMY_BUSD_CONTRACT
     const toToken = process.env.HMY_BSCBUSD_CONTRACT
     const fromAddress = req.body.ethAddress
-    const destinationAddress = ethAddress
     const swapResult = await viper.swapForTokenWithContracts(amount, fromAddress, fromToken, toToken, destinationAddress, routerContract, fromTokenContract, toTokenContract)
     if (swapResult.success == true) {
-      const result = await bridge.BurnWithHash(approveTxnHash, depositTxnHash, burnTxnHash, oneAddress, ethAddress, amount);
+      await bridge.BurnWithHash(burnApproveTxnHash, depositTxnHash, burnTxnHash, oneAddress, ethAddress, amount);
     }
     res.send("Assets Successfully swapped");
   } else {
