@@ -1,4 +1,3 @@
-const BN = require("bn.js")
 const Web3 = require("web3")
 const https = require('https')
 var contracts = require('./contracts.js')
