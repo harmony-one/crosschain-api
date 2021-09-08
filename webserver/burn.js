@@ -5,14 +5,15 @@ const BN = require('bn.js')
 const Web3 = require('web3')
 const configs = require('bridge-sdk/lib/configs')
 
+/*
+ * Exports for all public functions
+*/
 module.exports.Burn = async function(depositTxnHash, approveTxnHash, burnTxnHash, oneAddress, ethAddress, amount) {
   return await burn(depositTxnHash, approveTxnHash, burnTxnHash, oneAddress, ethAddress, amount)
 }
-
 module.exports.Deposit = async function(node, gasLimit, abiJson,  wallet) {
   return await deposit(node, gasLimit, abiJson,  wallet)
 }
-
 module.exports.BurnTxn = async function(node, gasLimit, abiJson, contractManagerAddress, wallet, amountInWei) {
   return await burnTxn(node, gasLimit, abiJson, contractManagerAddress, wallet, amountInWei)
 }
