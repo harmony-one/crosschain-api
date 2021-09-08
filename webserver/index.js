@@ -13,7 +13,7 @@ var cors=require('cors');
 
 app.use(cors({origin:true,credentials: true}));
 
-// ENPOINTS
+// ENDPOINTS
 
 app.post('/swap/bridge-in', async(req, res) => {
 
@@ -54,8 +54,8 @@ app.post('/swap/viper', async(req, res) => {
   const routerContract = req.body.routerContract
   const fromTokenContract = req.body.fromTokenContract
   
-  viper.swapForTokenWithContracts(amount, fromAddress, destinationAddress, routerContract, fromTokenContract, toTokenContract)
-  res.send('Viper Swap');
+  const result = viper.swapForTokenWithContracts(amount, fromAddress, destinationAddress, routerContract, fromTokenContract, toTokenContract)
+  res.send(result);
 });
 
 app.post('/swap', async(req, res) => {
