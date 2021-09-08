@@ -21,11 +21,9 @@ module.exports.BurnWithHash = async function(approveTxnHash, depositTxnHash, bur
 
 // create and sign approve BUSD txn
 async function approveContractManager(node, gasLimit, abiJson, contractAddress, contractManagerAddress, wallet, amountInWei) {
-  
   const web3 = new Web3(
     new Web3.providers.HttpProvider(node) 
   );
-  
   let account = web3.eth.accounts.privateKeyToAccount(wallet);
   web3.eth.accounts.wallet.add(account);
   web3.eth.defaultAccount = account.address;
@@ -46,7 +44,6 @@ async function approveContractManager(node, gasLimit, abiJson, contractAddress, 
 
 async function bridge(trx, oneAddress, ethAddress, node, gasLimit, contractAbiJson, contractAddress, contractManagerAbiJson, contractManagerAddress, wallet, amount) {
   try {
-    
     let fomattedAmount = web3.utils.toWei(amount, "ether");
     console.log("Node:", node)
     console.log("Gas Limit:", gasLimit)
@@ -56,7 +53,6 @@ async function bridge(trx, oneAddress, ethAddress, node, gasLimit, contractAbiJs
     console.log("Contract Manager Address:", contractManagerAddress)
     console.log("Amount:", amount)
     console.log("Amount in Wei:", fomattedAmount)
-
     // ===== Approve Contract Manager ===== //
     const approveTxnHash = await approveContractManager(node, gasLimit, contractAbiJson, contractAddress, contractManagerAddress, wallet, fomattedAmount);
     console.log("approveTxnHash", approveTxnHash);

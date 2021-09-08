@@ -158,9 +158,7 @@ app.post('/local/swap/viper', async(req, res) => {
 });
 
 app.post('/local/swap', async(req, res) => {
-
   //TODO: if (await viper.checkBalance(wallet, toToken, "1") > -1)
-
   const oneAddress = req.body.oneAddress
   const ethAddress = req.body.ethAddress 
   const amount = req.body.amount
@@ -176,7 +174,7 @@ app.post('/local/swap', async(req, res) => {
     './abi/BUSDEthManager.json', 
     process.env.ETH_BUSD_MANAGER_CONTRACT, 
     wallet, 
-    amount);
+    amount)
 
   if (lockResult.success == true) {
     console.log("Assets Successfully Bridged, swapping bridged assets");
@@ -185,41 +183,38 @@ app.post('/local/swap', async(req, res) => {
     const fromToken = process.env.HMY_BUSD_CONTRACT
     const toToken = process.env.HMY_BSCBUSD_CONTRACT
     const destinationAddress = ethAddress
-
-    // *** //
-    viper.checkBalance(ethersWallet, fromToken, "1").then(function(result){
-      if (result == true) {
+    await viper.checkBalance(ethersWallet, fromToken, amount).then(async(result) => {
+      if (result.success == true) { 
         const swapResult = await viper.swapForToken(amount, ethersWallet, fromToken, toToken, destinationAddress)
-
         if (swapResult.success == true) {
-          const result = await bridge.Bridge(1,
-          oneAddress,
-          ethAddress,
-          process.env.HARMONY_NODE_URL,
-          process.env.ETH_GAS_LIMIT,
-          './abi/BUSD.json', 
-          process.env.HMY_BSCBUSD_CONTRACT,
-          './abi/BridgeManager.json', 
-          process.env.HMY_BSCBUSD_MANAGER_CONTRACT, 
-          wallet, 
-          amount);
+          await viper.checkBalance(ethersWallet, toToken, amount).then(async(result) => {
+            if (result.success == true) { 
+              await bridge.Bridge(1,
+                oneAddress,
+                ethAddress,
+                process.env.HARMONY_NODE_URL,
+                process.env.ETH_GAS_LIMIT,
+                './abi/BUSD.json', 
+                process.env.HMY_BSCBUSD_CONTRACT,
+                './abi/BridgeManager.json', 
+                process.env.HMY_BSCBUSD_MANAGER_CONTRACT, 
+                wallet, 
+                amount)
+            } else {
+              res.send(result);
+            }
+          })
         }
-
-        res.send("Assets Successfully swapped");
-
+        res.send({ trx: "viper", success: true});
       } else {
-        res.send("Bridge Failed");
+        res.send(result);
       }
-    });
-    // *** //
-
-    
+    })
 
   } else {
     console.log("Assets Bridging Failed");
-    res.send("Assets Bridging Failed");
+    res.send(lockResult);
   }
-
 });
 
 app.post('/viper/balance',(req, res) => {

@@ -17,18 +17,35 @@ const setAllowance = async function(fromTokenContract, amount, router) {
   await fromTokenContract.approve(router.address, amount)
 }
 
-const checkBalance = async function(wallet, fromToken, amount) {
-
-  try {
-    const fromTokenContract = contracts.getTokenContract(ChainId.HARMONY_TESTNET, fromToken, wallet)
-    const fromTokenSymbol = await fromTokenContract.symbol()
-    console.log(`Checking ${fromTokenSymbol} balance for ${wallet.address} ...`)
-    const tokenBalance = await fromTokenContract.balanceOf(wallet.address)
-    return math.compare(tokenBalance._hex, parseEther(amount)._hex)
-  } catch (e) {
-    console.error("Error: ", e.message, e);
-  } 
-
+const checkBalance = async function(wallet, token, amount) {
+  return new Promise(async(resolve, reject) => {
+    try {
+      const tokenContract = contracts.getTokenContract(ChainId.HARMONY_TESTNET, token, wallet)
+      const tokenSymbol = await tokenContract.symbol()
+      console.log(`Checking ${tokenSymbol} balance for ${wallet.address} ...`)
+      const tokenBalance = await tokenContract.balanceOf(wallet.address)
+      var startTime = new Date().getTime();
+      var interval = await setInterval(function() { 
+        if(new Date().getTime() - startTime > 30000){
+          clearInterval(interval)
+          resolve({ trx: "viper", 
+                    success: false, 
+                    error_message: "No Balance Available", 
+                    error_body: "There is not enough balance in the " + token + " wallet and the request at Viperswap timed out"})
+        }
+        if (math.compare(tokenBalance._hex, parseEther(amount)._hex)) {
+          clearInterval(interval)
+          resolve({ trx: "viper", success: true})
+        }
+      }, 10000);
+      
+    } catch (e) {
+      resolve({ trx: "viper", 
+                    success: false, 
+                    error_message: e.message, 
+                    error_body: e.response?.body})
+    } 
+  });
 }
 
 const swapForToken = async function(amount, wallet, fromToken, toToken, destinationAddress) {
