@@ -7,6 +7,9 @@ const web3 = new Web3(new Web3.providers.HttpProvider(process.env.HARMONY_NODE_U
 var lock = require('./lock.js');
 var burn = require('./burn.js');
 
+/*
+ * Exports for all public functions
+*/
 module.exports.Bridge = async function(trx, oneAddress, ethAddress, node, gasLimit, contractAbiJson, contractAddress, contractManagerAbiJson, contractManagerAddress, wallet, amount) {
   return await bridge(trx, oneAddress, ethAddress, node, gasLimit, contractAbiJson, contractAddress, contractManagerAbiJson, contractManagerAddress, wallet, amount);
 }
@@ -19,7 +22,16 @@ module.exports.BurnWithHash = async function(approveTxnHash, depositTxnHash, bur
   return await burnWithHash(approveTxnHash, depositTxnHash, burnTxnHash, oneAddress, ethAddress, amount);
 }
 
-// create and sign approve BUSD txn
+/* Create and sign a transaction to approve a manager contract
+ * @param {string} node
+ * @param {string} gasLimit
+ * @param {string} abiJson
+ * @param {string} contractAddress
+ * @param {string} contractManagerAddress
+ * @param {string} wallet
+ * @param {string} amountInWei
+ * @return {string} the signed transaction hash
+*/
 async function approveContractManager(node, gasLimit, abiJson, contractAddress, contractManagerAddress, wallet, amountInWei) {
   const web3 = new Web3(
     new Web3.providers.HttpProvider(node) 
@@ -42,6 +54,20 @@ async function approveContractManager(node, gasLimit, abiJson, contractAddress, 
   return transaction.transactionHash;
 }
 
+/* Call Harmony Horizon Bridge to bridge assets
+ * @param {int} trx 
+ * @param {string} oneAddress
+ * @param {string} ethAddress
+ * @param {string} node
+ * @param {string} gasLimit
+ * @param {string} contractAbiJson
+ * @param {string} contractAddress
+ * @param {string} contractManagerAbiJson
+ * @param {string} contractManagerAddress
+ * @param {string} wallet
+ * @param {string} amount
+ * @return {string} JSON with the request response
+*/
 async function bridge(trx, oneAddress, ethAddress, node, gasLimit, contractAbiJson, contractAddress, contractManagerAbiJson, contractManagerAddress, wallet, amount) {
   try {
     let fomattedAmount = web3.utils.toWei(amount, "ether");
@@ -81,6 +107,14 @@ async function bridge(trx, oneAddress, ethAddress, node, gasLimit, contractAbiJs
   }
 }
 
+/* Bridges assets from Ethereum to Harmony network
+ * @param {string} approveTxnHash
+ * @param {string} lockTxnHash
+ * @param {string} oneAddress
+ * @param {string} ethAddress
+ * @param {string} amount
+ * @return {string} JSON with the request response
+*/
 async function lockWithHash(approveTxnHash, lockTxnHash, oneAddress, ethAddress, amount) {
   try {
     let fomattedAmount = web3.utils.toWei(amount, "ether");
@@ -94,6 +128,15 @@ async function lockWithHash(approveTxnHash, lockTxnHash, oneAddress, ethAddress,
   }
 }
 
+/* Bridges assets from Harmony to Ethereum or BSC networks
+ * @param {string} approveTxnHash
+ * @param {string} depositTxnHash
+ * @param {string} burnTxnHash
+ * @param {string} oneAddress
+ * @param {string} ethAddress
+ * @param {string} amount
+ * @return {string} JSON with the request response
+*/
 async function burnWithHash(approveTxnHash, depositTxnHash, burnTxnHash, oneAddress, ethAddress, amount) {
   try {
     let fomattedAmount = web3.utils.toWei(amount, "ether");
