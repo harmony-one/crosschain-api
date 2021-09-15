@@ -46,9 +46,16 @@ app.post('/swap/bridge-out', async(req, res) => {
 
 });
 
+app.post('swap/viper/balance',(req, res) => {
+  const amount = req.body.amount
+  const address = req.body.address
+  const tokenContract = req.body.tokenContract
+  const result = viper.checkBalanceWithContract(address, tokenContract, amount)
+  res.send(result)
+});
+
 app.post('/swap/viper', async(req, res) => {
   const amount = req.body.amount
-  const oneAddress = req.body.oneAddress
   const fromAddress = req.body.ethAddress
   const destinationAddress = ethAddress
   const routerContract = req.body.routerContract
@@ -60,8 +67,6 @@ app.post('/swap/viper', async(req, res) => {
 
 app.post('/swap', async(req, res) => {
 
-  //TODO: if (await viper.checkBalance(wallet, toToken, "1") > -1)
-
   const oneAddress = req.body.oneAddress
   const ethAddress = req.body.ethAddress 
   const amount = req.body.amount
@@ -72,9 +77,8 @@ app.post('/swap', async(req, res) => {
   const burnTxnHash = req.body.burnTxnHash
   const routerContract = req.body.routerContract
   const fromTokenContract = req.body.fromTokenContract
-  const destinationAddress = ethAddress
   
-  const lockResult = await bridge.LockWithHash(approveTxnHash, lockTxnHash, oneAddress, ethAddress, amount);
+  const lockResult = await bridge.LockWithHash(lockApproveTxnHash, lockTxnHash, oneAddress, ethAddress, amount);
 
   if (lockResult.success == true) {
     console.log("Assets Successfully Bridged, swapping bridged assets");
@@ -84,7 +88,7 @@ app.post('/swap', async(req, res) => {
     const destinationAddress = ethAddress
     const swapResult = await viper.swapForTokenWithContracts(amount, fromAddress, fromToken, toToken, destinationAddress, routerContract, fromTokenContract, toTokenContract)
     if (swapResult.success == true) {
-      const result = await bridge.BurnWithHash(approveTxnHash, depositTxnHash, burnTxnHash, oneAddress, ethAddress, amount);
+      const result = await bridge.BurnWithHash(burnApproveTxnHash, depositTxnHash, burnTxnHash, oneAddress, ethAddress, amount);
     }
     res.send("Assets Successfully swapped");
   } else {
@@ -212,7 +216,7 @@ app.post('/local/swap', async(req, res) => {
   }
 });
 
-app.post('/local/viper/balance',(req, res) => {
+app.post('/local/swap/viper/balance',(req, res) => {
   const provider = new ethers.providers.JsonRpcProvider(process.env.HARMONY_NODE_URL);
   let ethersWallet = new ethers.Wallet(req.body.wallet, provider);
   const fromToken = process.env.HMY_BUSD_CONTRACT
@@ -234,9 +238,10 @@ app.post('/local/viper/addLiqudity',(req, res) => {
   res.send(result)
 });
 
-app.post('/viper/removeLiqudity',(req, res) => {
+app.post('local/viper/removeLiqudity',(req, res) => {
   const tokenA = req.body.tokenA
   const tokenB = req.body.tokenB
+  const removalPercentage = req.body.removalPercentage
   const provider = new ethers.providers.JsonRpcProvider(process.env.HARMONY_NODE_URL);
   let ethersWallet = new ethers.Wallet(req.body.wallet, provider);
   const result = viper.addLiquidity(ethersWallet, tokenA, tokenB, removalPercentage)

@@ -10,8 +10,12 @@ module.exports.swapForTokenWithContracts = async function(amount, address, desti
   return await swap.swapForTokenWithContracts(amount, address, destinationAddress, routerContract, fromTokenContract, toTokenContract)
 }
 
-module.exports.checkBalance = async function(amount, wallet, fromToken, toToken, destinationAddress) {
-  return await balance.checkBalance(amount, wallet, fromToken, toToken, destinationAddress);
+module.exports.checkBalance = async function(wallet, token, amount) {
+  return await balance.checkBalance(wallet, token, amount);
+}
+
+module.exports.checkBalanceWithContract = async function(address, tokenContract, amount) {
+  return await balance.checkBalanceWithContract(address, tokenContract, amount);
 }
 
 module.exports.addLiquidity = async function(wallet, tokenA, tokenB, amountADesired, amountBDesired, amountAMin, amountBMin, sendTo) {

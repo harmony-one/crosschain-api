@@ -3,17 +3,20 @@ const parseEther = require('ethers').utils.parseEther
 const math = require('mathjs')
 var contracts = require('./contracts.js')
 
-module.exports.checkBalance = async function(amount, wallet, fromToken, toToken, destinationAddress) {
-  return await checkBalance(amount, wallet, fromToken, toToken, destinationAddress);
+module.exports.checkBalance = async function(wallet, token, amount) {
+  return await checkBalance(wallet, token, amount);
 }
 
-const checkBalance = async function(wallet, token, amount) {
+module.exports.checkBalanceWithContract = async function(wallet, tokenContract, amount) {
+  return await checkBalanceWithContract(address, tokenContract, amount);
+}
+
+const checkBalanceWithContract = async function(address, tokenContract, amount) {
   return new Promise(async(resolve, reject) => {
     try {
-      const tokenContract = contracts.getTokenContract(ChainId.HARMONY_TESTNET, token, wallet)
       const tokenSymbol = await tokenContract.symbol()
-      console.log(`Checking ${tokenSymbol} balance for ${wallet.address} ...`)
-      const tokenBalance = await tokenContract.balanceOf(wallet.address)
+      console.log(`Checking ${tokenSymbol} balance for ${address} ...`)
+      const tokenBalance = await tokenContract.balanceOf(address)
       var startTime = new Date().getTime();
       var interval = await setInterval(function() { 
         if(new Date().getTime() - startTime > 30000){
@@ -36,4 +39,9 @@ const checkBalance = async function(wallet, token, amount) {
                     error_body: e.response?.body})
     } 
   });
+}
+
+const checkBalance = async function(wallet, token, amount) {
+  const tokenContract = contracts.getTokenContract(ChainId.HARMONY_TESTNET, token, wallet)
+  return await checkBalanceWithContract(wallet.address, tokenContract, amount)
 }
