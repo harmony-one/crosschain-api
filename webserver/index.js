@@ -7,8 +7,8 @@ const app = express();
 
 app.use(express.json());
 
-var bridge = require('./bridge.js');
-var viper = require('./viper.js');
+var bridge = require('./bridg/bridge.js');
+var viper = require('./viper/viper.js');
 var cors=require('cors');
 
 app.use(cors({origin:true,credentials: true}));
@@ -116,7 +116,6 @@ app.post('/local/swap/bridge-in', async(req, res) => {
   
   console.log("result", await result);
   res.send(result);
-
 });
 
 app.post('/local/swap/bridge-out', async(req, res) => {
@@ -137,16 +136,13 @@ app.post('/local/swap/bridge-out', async(req, res) => {
     process.env.HMY_BSCBUSD_MANAGER_CONTRACT, 
     wallet, 
     amount);
-  
   console.log("result", await result);
   res.send(result);
-
 });
 
 app.post('/local/swap/viper', async(req, res) => {
   
   const amount = req.body.amount
-  const oneAddress = req.body.oneAddress
   const ethAddress = req.body.ethAddress
   const provider = new ethers.providers.JsonRpcProvider(process.env.HARMONY_NODE_URL);
   let wallet = new ethers.Wallet(req.body.wallet, provider);
@@ -158,7 +154,6 @@ app.post('/local/swap/viper', async(req, res) => {
 });
 
 app.post('/local/swap', async(req, res) => {
-  //TODO: if (await viper.checkBalance(wallet, toToken, "1") > -1)
   const oneAddress = req.body.oneAddress
   const ethAddress = req.body.ethAddress 
   const amount = req.body.amount
@@ -217,17 +212,35 @@ app.post('/local/swap', async(req, res) => {
   }
 });
 
-app.post('/viper/balance',(req, res) => {
-
+app.post('/local/viper/balance',(req, res) => {
   const provider = new ethers.providers.JsonRpcProvider(process.env.HARMONY_NODE_URL);
-  const account_from = {
-    privateKey: process.env.PRIVATE_KEY,
-  };
-  let wallet = new ethers.Wallet("", provider);
-  const fromToken = '0xc4860463c59d59a9afac9fde35dff9da363e8425' // BUSD
-  res.send('Balance');
-  viper.checkBalance(wallet, fromToken, "1")
+  let ethersWallet = new ethers.Wallet(req.body.wallet, provider);
+  const fromToken = process.env.HMY_BUSD_CONTRACT
+  const result = viper.checkBalance(ethersWallet, fromToken, amount)
+  res.send(result)
+});
 
+app.post('/local/viper/addLiqudity',(req, res) => {
+  const tokenA = req.body.tokenA
+  const tokenB = req.body.tokenB
+  const amountADesired = req.body.amountADesired
+  const amountBDesired = req.body.amountBDesired
+  const amountAMin = req.body.amountAMin
+  const amountBMin = req.body.amountBMin
+  const sendTo = req.body.sendTo
+  const provider = new ethers.providers.JsonRpcProvider(process.env.HARMONY_NODE_URL);
+  let ethersWallet = new ethers.Wallet(req.body.wallet, provider);
+  const result = viper.addLiquidity(ethersWallet, tokenA, tokenB, amountADesired, amountBDesired, amountAMin, amountBMin, sendTo)
+  res.send(result)
+});
+
+app.post('/viper/removeLiqudity',(req, res) => {
+  const tokenA = req.body.tokenA
+  const tokenB = req.body.tokenB
+  const provider = new ethers.providers.JsonRpcProvider(process.env.HARMONY_NODE_URL);
+  let ethersWallet = new ethers.Wallet(req.body.wallet, provider);
+  const result = viper.addLiquidity(ethersWallet, tokenA, tokenB, removalPercentage)
+  res.send(result)
 });
 
 const port = process.env.PORT || 3000;

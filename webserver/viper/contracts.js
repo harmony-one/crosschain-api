@@ -5,7 +5,6 @@ const ROUTER_ABI = require('@viperswap/periphery/build/IUniswapV2Router02.json')
 const IERC20_ABI = require('@venomswap/periphery/build/IERC20.json').abi
 const IUNISWAPV2PAIR_ABI = require('@viperswap/periphery/build/IUniswapV2Pair.json').abi
 const MASTER_BREEDER_ABI = require('@venomswap/contracts/build/MasterBreeder.json').abi
-const ChainId = require('@venomswap/sdk').ChainId
 
 module.exports.getRouterContract = function(
     chainId,
