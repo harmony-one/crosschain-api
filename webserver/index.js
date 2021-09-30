@@ -7,7 +7,7 @@ const app = express();
 
 app.use(express.json());
 
-var bridge = require('./bridg/bridge.js');
+var bridge = require('./bridge/bridge.js');
 var viper = require('./viper/viper.js');
 var cors=require('cors');
 
@@ -111,9 +111,9 @@ app.post('/local/swap/bridge-in', async(req, res) => {
     ethAddress,
     process.env.ETH_NODE_URL,
     process.env.ETH_GAS_LIMIT,
-    './abi/BUSD.json', 
+    '../abi/BUSD.json', 
     process.env.ETH_BUSD_CONTRACT,
-    './abi/BUSDEthManager.json', 
+    '../abi/BUSDEthManager.json', 
     process.env.ETH_BUSD_MANAGER_CONTRACT, 
     wallet, 
     amount);
@@ -134,9 +134,9 @@ app.post('/local/swap/bridge-out', async(req, res) => {
     ethAddress,
     process.env.HARMONY_NODE_URL,
     process.env.ETH_GAS_LIMIT,
-    './abi/BUSD.json', 
+    '../abi/BUSD.json', 
     process.env.HMY_BSCBUSD_CONTRACT,
-    './abi/BridgeManager.json', 
+    '../abi/BridgeManager.json', 
     process.env.HMY_BSCBUSD_MANAGER_CONTRACT, 
     wallet, 
     amount);
@@ -168,9 +168,9 @@ app.post('/local/swap', async(req, res) => {
     ethAddress,
     process.env.ETH_NODE_URL,
     process.env.ETH_GAS_LIMIT,
-    './abi/BUSD.json', 
+    '../abi/BUSD.json', 
     process.env.ETH_BUSD_CONTRACT,
-    './abi/BUSDEthManager.json', 
+    '../abi/BUSDEthManager.json', 
     process.env.ETH_BUSD_MANAGER_CONTRACT, 
     wallet, 
     amount)
@@ -193,9 +193,9 @@ app.post('/local/swap', async(req, res) => {
                 ethAddress,
                 process.env.HARMONY_NODE_URL,
                 process.env.ETH_GAS_LIMIT,
-                './abi/BUSD.json', 
+                '../abi/BUSD.json', 
                 process.env.HMY_BSCBUSD_CONTRACT,
-                './abi/BridgeManager.json', 
+                '../abi/BridgeManager.json', 
                 process.env.HMY_BSCBUSD_MANAGER_CONTRACT, 
                 wallet, 
                 amount)
