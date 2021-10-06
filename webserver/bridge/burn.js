@@ -105,6 +105,7 @@ const burn = async (depositTxnHash, approveTxnHash, burnTxnHash, oneAddress, eth
       actionType: ACTION_TYPE.depositOne,
       transactionHash: depositTxnHash,
     })
+    console.log("Deposit Approved")
     await operation.confirmAction({
       actionType: ACTION_TYPE.approveHmyManger,
       transactionHash: approveTxnHash,
@@ -114,7 +115,6 @@ const burn = async (depositTxnHash, approveTxnHash, burnTxnHash, oneAddress, eth
       actionType: ACTION_TYPE.burnToken,
       transactionHash: burnTxnHash,
     })
-    console.log("Burn Token Approved")
     return { trx: "swap", success: true}
   
   } catch (e) {

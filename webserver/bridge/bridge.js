@@ -92,7 +92,7 @@ async function bridge(trx, oneAddress, ethAddress, node, gasLimit, contractAbiJs
         break;
       case 1: // Burn
       console.log("Trx:", "Burn it!") 
-        const depositTxnHash = await burn.Deposit(node, gasLimit, './abi/Deposit.json', wallet, fomattedAmount);
+        const depositTxnHash = await burn.Deposit(node, gasLimit, '../abi/Deposit.json', wallet, fomattedAmount);
         console.log("depositTxnHash", depositTxnHash);
         const burnTxnHash = await burn.BurnTxn(node, gasLimit, contractManagerAbiJson, contractManagerAddress, wallet, fomattedAmount);
         console.log("burnTxnHash", burnTxnHash);
